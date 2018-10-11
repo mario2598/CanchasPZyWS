@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.4.1 (UNKNOWN-d6059cd; 2018-05-22T06:32:54-0700) JAXWS-RI/2.3.0.1 JAXWS-API/2.3.0 JAXB-RI/2.3.0.1 JAXB-API/2.3.0 svn-revision#unknown. --><xs:schema xmlns:tns="http://ws/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws/">
+
+<xs:element name="administrador" type="tns:administrador"/>
+
+<xs:element name="cancha" type="tns:cancha"/>
+
+<xs:element name="equipo" type="tns:equipo"/>
+
+<xs:element name="getAdmin" type="tns:getAdmin"/>
+
+<xs:element name="getAdminResponse" type="tns:getAdminResponse"/>
+
+<xs:element name="getEquipo" type="tns:getEquipo"/>
+
+<xs:element name="getEquipoResponse" type="tns:getEquipoResponse"/>
+
+<xs:element name="reto" type="tns:reto"/>
+
+<xs:complexType name="getAdmin">
+<xs:sequence>
+<xs:element name="usu" type="xs:string" minOccurs="0"/>
+<xs:element name="contra" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getAdminResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:administrador" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="administrador">
+<xs:sequence>
+<xs:element name="admId" type="xs:decimal" minOccurs="0"/>
+<xs:element name="admPassword" type="xs:string" minOccurs="0"/>
+<xs:element name="admUsu" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getEquipo">
+<xs:sequence>
+<xs:element name="usu" type="xs:string" minOccurs="0"/>
+<xs:element name="contra" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getEquipoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:equipo" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="equipo">
+<xs:sequence>
+<xs:element name="equId" type="xs:decimal" minOccurs="0"/>
+<xs:element name="equNomJug1" type="xs:string" minOccurs="0"/>
+<xs:element name="equNomJug2" type="xs:string" minOccurs="0"/>
+<xs:element name="equNombre" type="xs:string" minOccurs="0"/>
+<xs:element name="equPassword" type="xs:string" minOccurs="0"/>
+<xs:element name="equPts" type="xs:integer" minOccurs="0"/>
+<xs:element name="equTelJug1" type="xs:integer" minOccurs="0"/>
+<xs:element name="equTelJug2" type="xs:integer" minOccurs="0"/>
+<xs:element name="equUrl" type="xs:string" minOccurs="0"/>
+<xs:element name="equUsu" type="xs:string" minOccurs="0"/>
+<xs:element name="retoId" type="tns:reto" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="reto">
+<xs:sequence>
+<xs:element name="canchaId" type="tns:cancha" minOccurs="0"/>
+<xs:element name="equipo1Id" type="tns:equipo" minOccurs="0"/>
+<xs:element name="equipo2Id" type="tns:equipo" minOccurs="0"/>
+<xs:element name="retoCompleto" type="xs:string" minOccurs="0"/>
+<xs:element name="retoFecha" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="retoHoraFin" type="xs:integer" minOccurs="0"/>
+<xs:element name="retoHoraIni" type="xs:integer" minOccurs="0"/>
+<xs:element name="retoId" type="xs:decimal" minOccurs="0"/>
+<xs:element name="retoNivel" type="xs:integer" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cancha">
+<xs:sequence>
+<xs:element name="admId" type="tns:administrador" minOccurs="0"/>
+<xs:element name="canAbre" type="xs:integer" minOccurs="0"/>
+<xs:element name="canCantJugadores" type="xs:integer" minOccurs="0"/>
+<xs:element name="canCierra" type="xs:integer" minOccurs="0"/>
+<xs:element name="canDireccion" type="xs:string" minOccurs="0"/>
+<xs:element name="canId" type="xs:decimal" minOccurs="0"/>
+<xs:element name="canLatitud" type="xs:integer" minOccurs="0"/>
+<xs:element name="canLongitud" type="xs:integer" minOccurs="0"/>
+<xs:element name="canNombre" type="xs:string" minOccurs="0"/>
+<xs:element name="canPrecioDia" type="xs:integer" minOccurs="0"/>
+<xs:element name="canPrecioNoches" type="xs:integer" minOccurs="0"/>
+<xs:element name="canTel" type="xs:integer" minOccurs="0"/>
+<xs:element name="canUrl" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

@@ -1,0 +1,144 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15/08/2018, 02:57:48 PM
+    Author     : robri
+*/
+
+*{
+   -fx-base-color-label-tf: #333333;
+   -fx-base-color-label-ds: #98999A;
+   -fx-font-family: Roboto;
+    -fx-base-color:white;
+    -fx-uncolored:transparent;
+    -fx-dark-color:#2B2B2B;
+    -fx-dark-color-2:derive(#2B2B2B,50);
+    -fx-primary-color:#0053B9;
+    -fx-secundary-color:#031038;/*#031038*/
+    -fx-contrast-color:#17D662;
+}
+
+#root{
+    -fx-background-color: -fx-base-color;
+    -fx-alignment: CENTER;
+}
+
+.pane{
+    -fx-background-color: linear-gradient(from 1px 2px to 2px 1px, repeat,  -fx-dark-color-2 30%, -fx-base-color  47%);
+}
+
+.jfx-dialog-layaut{
+    -fx-background-color: -fx-uncolored;
+    -fx-background-fills: -fx-uncolored;
+    -fx-background-radius: 30%;
+    -fx-border-color: linear-gradient(from 1px 2px to 2px 1px, repeat,  -fx-secundary-color 30%, -fx-primary-color  47%);
+    -fx-opacity: 0.95;
+}
+
+.jfx-button{
+    -fx-background-color: linear-gradient(from 1px 2px to 2px 1px, repeat,  -fx-secundary-color 30%, -fx-primary-color  47%);;
+    -jfx-button-type:RAISED;/*para que el botón se vea como levantado*/
+    -fx-opacity: 0.95;
+    -fx-content-display: center;
+    -fx-text-fill: -fx-base-color;
+    -fx-font-weight:bold;
+    -fx-alignment: CENTER;
+    -fx-background-radius: 40 40 40 40;
+    -fx-border-radius: 40 40 40 40;
+    -fx-border-width:5;
+}
+
+.separator{
+    -fx-background-size: 50;
+    -fx-border-width: 100;
+    -fx-orientation: vertical; 
+    -fx-background-color: linear-gradient(from 1px 2px to 2px 1px, repeat,  -fx-secundary-color 30%, -fx-primary-color  47%);
+}
+
+/*esto quita la línea del medio del separator*/
+.separator *.line {
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 1 0; /* its make really one-pixel-border */
+    -fx-border-color: red;
+}
+
+#separator-green{
+    -fx-background-color: linear-gradient(from 1px 2px to 2px 1px, repeat,  -fx-secundary-color 30%, green  47%);
+}
+
+#separator-red{
+    -fx-background-color: linear-gradient(from 1px 2px to 2px 1px, repeat,  -fx-secundary-color 30%, red  47%);
+}
+
+#separator-yellow{
+    -fx-background-color: linear-gradient(from 1px 2px to 2px 1px, repeat,  -fx-secundary-color 30%, yellow  47%);
+}
+
+.image-view{
+    -fx-border-radius: 50 0 0 50;
+    -fx-background-radius: 50 0 0 50;
+    -fx-border-radius: 50%;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: lightgrey;
+}
+
+.label{
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-base-color-label-tf;
+    -fx-effect: dropshadow( gaussian , -fx-base-color-label-ds , 0,0,0,1 );
+    -fx-alignment: center;
+}
+
+.label-Score{
+    -fx-font-size: 30px;
+}
+
+.text-field{
+    -fx-text-fill: -fx-base-color-label-tf;
+    -fx-effect: dropshadow( gaussian , -fx-base-color-label-ds , 0,0,0,1 );
+    -fx-font-size: 15px;
+    -fx-alignment: CENTER;
+}
+
+.label-team-name{
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER;
+}
+
+.image-view-avatar{
+    -fx-fit-width: 20;
+    -fx-fit-height: 20;
+    -fx-border-radius: 50 0 0 50;
+    -fx-background-radius: 50 0 0 50;
+    -fx-border-radius: 50%;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: lightgrey;
+}
+
+.h-box{
+    -fx-alignment: CENTER;
+    -fx-spacing: 40;
+}
+
+.v-box{
+    -fx-alignment: CENTER;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+
+.pane{
+    -fx-alignment: CENTER;
+}
+
+.tile-pane{
+    -fx-alignment: CENTER;
+    -fx-hgap: 10;
+}
+

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDialogLayout?>
+<?import com.jfoenix.controls.JFXScrollPane?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+
+<JFXDialogLayout maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="canchaspz.controller.ChallengesInfoController">
+   <children>
+      <StackPane prefHeight="150.0" prefWidth="200.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="300.0" prefHeight="360.0" prefWidth="173.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="90.0" prefWidth="170.0">
+                           <children>
+                              <ImageView fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/calendar.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label fx:id="dateLbl" alignment="CENTER" prefHeight="17.0" prefWidth="90.0" text="0/0/0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="90.0" prefWidth="170.0">
+                           <children>
+                              <ImageView fitHeight="31.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/clock.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <JFXComboBox fx:id="hoursCB" prefHeight="25.0" prefWidth="88.0" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="90.0" prefWidth="170.0">
+                           <children>
+                              <ImageView fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/field.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label fx:id="fieldLbl" alignment="CENTER" prefHeight="17.0" prefWidth="90.0" text="Cancha tal" />
+                           </children>
+                        </HBox>
+                        <JFXButton fx:id="btnAceptar" onAction="#aceptar" prefHeight="25.0" prefWidth="120.0" text="Aceptar Reto" />
+                        <JFXButton onAction="#volver" prefHeight="25.0" prefWidth="120.0" text="Volver">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+                  <JFXTabPane prefHeight="360.0" prefWidth="384.0" side="RIGHT">
+                     <tabs>
+                        <Tab text="Información">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox prefHeight="360.0" prefWidth="348.0">
+                                       <children>
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fx:id="imgLogo" fitHeight="77.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../resources/teamLogo.jpg" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label fx:id="teamNameLbl" alignment="CENTER" prefHeight="100.0" prefWidth="204.0" text="Nmbre Equipo" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER" prefHeight="55.0" prefWidth="348.0">
+                                             <children>
+                                                <ImageView fitHeight="47.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../resources/Ball.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label fx:id="playedMatchsLbl" alignment="CENTER" prefHeight="100.0" prefWidth="204.0" text="Part Jugados" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER" prefHeight="55.0" prefWidth="348.0">
+                                             <children>
+                                                <ImageView fitHeight="34.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../resources/sum.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label fx:id="sumLbl" alignment="CENTER" prefHeight="100.0" prefWidth="204.0" text="Part Jugados" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER" prefHeight="55.0" prefWidth="348.0">
+                                             <children>
+                                                <ImageView fitHeight="36.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../resources/percent.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label fx:id="avrgLbl" alignment="CENTER" prefHeight="100.0" prefWidth="204.0" text="Part Jugados" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER" prefHeight="55.0" prefWidth="348.0">
+                                             <children>
+                                                <ImageView fitHeight="36.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../resources/rankPos.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label fx:id="posLbl" alignment="CENTER" prefHeight="100.0" prefWidth="204.0" text="Part Jugados" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab text="Historial">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXScrollPane prefHeight="360.0" prefWidth="348.0">
+                                       <children>
+                                          <TilePane fx:id="historyTP" prefColumns="1" prefHeight="200.0" prefWidth="200.0" />
+                                       </children>
+                                    </JFXScrollPane>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </Tab>
+                     </tabs>
+                  </JFXTabPane>
+               </children>
+            </HBox>
+         </children>
+      </StackPane>
+   </children>
+</JFXDialogLayout>

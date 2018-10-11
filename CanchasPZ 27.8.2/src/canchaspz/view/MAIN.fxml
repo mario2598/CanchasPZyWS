@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1100.0" style="-fx-background-color: #bcbcbc;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="canchaspz.controller.MAINController">
+   <children>
+      <AnchorPane prefHeight="50.0" prefWidth="1100.0" style="-fx-background-color: green;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <JFXButton fx:id="exitBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="18.0" layoutX="1148.0" layoutY="20.0" maxHeight="40.0" maxWidth="130.0" minHeight="40.0" minWidth="40.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="46.0" ripplerFill="#bababa00" textFill="#c3c3c3" textOverrun="CLIP" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+         <graphic>
+            <MaterialDesignIconView fill="#bcbcbc" glyphName="CLOSE_CIRCLE" nodeOrientation="RIGHT_TO_LEFT" size="26" strokeLineCap="ROUND" strokeLineJoin="ROUND" />
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="searchBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="18.0" layoutX="1088.0" layoutY="22.0" maxHeight="40.0" maxWidth="130.0" minHeight="40.0" minWidth="40.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="46.0" ripplerFill="#bfbfbf" textFill="#c3c3c3" textOverrun="CLIP" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="6.0">
+         <graphic>
+            <MaterialDesignIconView fill="#bcbcbc" glyphName="MAGNIFY" nodeOrientation="LEFT_TO_RIGHT" size="30" strokeLineCap="ROUND" strokeLineJoin="ROUND" />
+         </graphic>
+      </JFXButton>
+      <JFXHamburger fx:id="hambBtn" alignment="CENTER" cache="true" layoutX="11.0" layoutY="11.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="63.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <StackPane fx:id="holderSP" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: #c6295650;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+      <Label fx:id="hambMenuBack" contentDisplay="GRAPHIC_ONLY" prefHeight="600.0" prefWidth="1100.0" text="Label" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <StackPane fx:id="hambMenuSP" prefHeight="150.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXDrawer fx:id="hambMenu" defaultDrawerSize="250.0" overLayVisible="false" prefHeight="508.0" prefWidth="250.0" />
+         </children>
+      </StackPane>
+      <StackPane fx:id="dialogSP" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   </children>
+</AnchorPane>

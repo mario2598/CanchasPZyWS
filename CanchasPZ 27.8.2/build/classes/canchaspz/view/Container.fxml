@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane fx:id="root" prefHeight="600.0" prefWidth="1100.0" style="-fx-background-color: white;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="canchaspz.controller.ContainerController">
+   <center>
+      <StackPane alignment="CENTER_LEFT" prefHeight="540.0" prefWidth="620.0" BorderPane.alignment="CENTER">
+         <children>
+            <StackPane fx:id="holderSP" prefHeight="150.0" prefWidth="200.0" />
+            <Label fx:id="hambMenuBack" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#closeMenu" prefHeight="4000.0" prefWidth="4000.0" text="zccxvghvcvxbn" />
+            <StackPane fx:id="hambMenuSP" alignment="CENTER_LEFT" maxWidth="250.0">
+               <children>
+                  <JFXDrawer fx:id="hambMenu" alignment="CENTER_LEFT" defaultDrawerSize="250.0" overLayVisible="false" />
+               </children>
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </StackPane>
+            <StackPane fx:id="dialogSP" prefHeight="540.0" prefWidth="62.0" />
+         </children>
+      </StackPane>
+   </center>
+   <top>
+      <AnchorPane prefHeight="40.0" prefWidth="1100.0" styleClass="anchor-pane-upper-bar" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="lblViewName" layoutX="60.0" layoutY="3.0" prefHeight="40.0" prefWidth="559.0" text="View Name" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <JFXHamburger fx:id="hambBtn" prefHeight="40.0" prefWidth="60.0" AnchorPane.leftAnchor="0.0" />
+            <JFXButton fx:id="searchBtn" focusTraversable="false" maxHeight="100.0" maxWidth="100.0" prefHeight="34.0" prefWidth="60.0" text=" " visible="false" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="2.0">
+               <graphic>
+                  <MaterialDesignIconView fill="#00fe84" glyphName="MAGNIFY" size="25" wrappingWidth="20.0" />
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="exitBtn" focusTraversable="false" prefHeight="34.0" prefWidth="60.0" text=" " visible="false" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="2.0">
+               <graphic>
+                  <MaterialDesignIconView fill="#00fe84" glyphName="FILTER" size="25" />
+               </graphic>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+   </top>
+</BorderPane>

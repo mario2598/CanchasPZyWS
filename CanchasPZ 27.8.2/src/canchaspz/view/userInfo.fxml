@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDialogLayout?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<JFXDialogLayout maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="canchaspz.controller.UserInfoController">
+   <children>
+      <VBox fx:id="hBoxAdmin" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" visible="false">
+         <children>
+            <HBox alignment="CENTER" prefHeight="77.0" prefWidth="774.0">
+               <children>
+                  <JFXTextField fx:id="txtAdminName" disable="true" focusColor="WHITE" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText="Nombre de Usuario" unFocusColor="#ebebeb">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </JFXTextField>
+                  <JFXPasswordField fx:id="pfAdminPass" disable="true" focusColor="WHITE" prefHeight="40.0" prefWidth="200.0" promptText="Contraseña" unFocusColor="#e4e4e4">
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </JFXPasswordField>
+               </children>
+            </HBox>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <HBox fx:id="adminEditBtns" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXButton fx:id="btnCancelAdmin" onAction="#cancelAdm" prefHeight="31.0" prefWidth="97.0" text="Cancelar" visible="false">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="btnAcceptAdmin" onAction="#registrarAdm" prefHeight="30.0" prefWidth="80.0" text="Aceptar" visible="false">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+                  <JFXButton fx:id="btnEditAdmin" onAction="#editAminInfo" text="Editar Datos" />
+               </children>
+            </StackPane>
+            <JFXButton fx:id="btnVolverAdm" onAction="#volverAdmin" prefHeight="31.0" prefWidth="104.0" text="Volver" />
+         </children>
+      </VBox>
+      <VBox fx:id="hBoxTeam" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="imgLogo1" disable="true" fitHeight="122.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/teamLogo.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </StackPane>
+                  <JFXTextField fx:id="txtTeamName" disable="true" focusColor="WHITE" labelFloat="true" prefHeight="33.0" prefWidth="224.0" promptText="Nombre del Equipo" unFocusColor="#ebebeb">
+                     <HBox.margin>
+                        <Insets left="60.0" top="60.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="500.0">
+               <children>
+                  <JFXTextField fx:id="txtUserName" disable="true" focusColor="WHITE" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText="Nombre de Usuario" unFocusColor="#ebebeb" />
+                  <JFXPasswordField fx:id="pfUserPass" disable="true" focusColor="WHITE" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText="Contraseña" unFocusColor="#f8f8f8">
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </JFXPasswordField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="500.0">
+               <children>
+                  <JFXTextField fx:id="txtContact1" disable="true" focusColor="WHITE" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText="Encargado del Equipo 1" unFocusColor="WHITE" />
+                  <JFXTextField fx:id="txtTel1" disable="true" focusColor="WHITE" labelFloat="true" prefHeight="40.0" prefWidth="210.0" promptText="Telefono" unFocusColor="WHITE">
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="500.0">
+               <children>
+                  <JFXTextField fx:id="txtContact2" disable="true" focusColor="WHITE" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText="Encargado del Equipo 2" unFocusColor="WHITE">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </JFXTextField>
+                  <JFXTextField fx:id="txtTel2" disable="true" focusColor="WHITE" labelFloat="true" prefHeight="40.0" prefWidth="200.0" promptText="Telefono" unFocusColor="WHITE">
+                     <HBox.margin>
+                        <Insets left="30.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+               </children>
+            </HBox>
+            <StackPane prefHeight="66.0" prefWidth="548.0">
+               <children>
+                  <HBox fx:id="userEditBtns" alignment="CENTER" prefHeight="61.0" prefWidth="548.0" spacing="100.0">
+                     <children>
+                        <JFXButton fx:id="btnCancel" onAction="#CancelChanges" prefHeight="30.0" prefWidth="80.0" text="Cancelar">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="btnAccept" onAction="#AcceptChanges" prefHeight="30.0" prefWidth="80.0" text="Aceptar">
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+                  <JFXButton fx:id="btnEditUser" onAction="#editUserInfo" text="Editar Datos" />
+               </children>
+            </StackPane>
+            <JFXButton fx:id="btnVolverEqu" onAction="#volverEqu" prefHeight="31.0" prefWidth="109.0" text="Volver">
+               <VBox.margin>
+                  <Insets left="240.0" />
+               </VBox.margin>
+            </JFXButton>
+         </children>
+      </VBox>
+   </children>
+</JFXDialogLayout>

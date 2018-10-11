@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDialogLayout?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<JFXDialogLayout maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="canchaspz.controller.AddMatchController">
+   <children>
+      <ImageView fitHeight="300.0" fitWidth="600.0" pickOnBounds="true">
+         <image>
+            <Image url="@../resources/versusBackground.jpg" />
+         </image>
+      </ImageView>
+      <AnchorPane>
+         <children>
+            <StackPane fx:id="team1AP" layoutX="15.0" layoutY="15.0" prefHeight="240.0" prefWidth="200.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+            <StackPane fx:id="team2AP" layoutX="385.0" layoutY="15.0" prefHeight="240.0" prefWidth="200.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+            <JFXButton fx:id="removeBtn1" contentDisplay="GRAPHIC_ONLY" layoutX="10.0" layoutY="10.0" onMouseClicked="#removeTeam1" prefHeight="50.0" prefWidth="50.0" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="10.0">
+               <graphic>
+                  <FontAwesomeIconView boundsType="VISUAL" fill="#bcbcbc" glyphName="REPLY" size="35" />
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="removeBtn2" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#removeTeam2" prefHeight="50.0" prefWidth="50.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+               <graphic>
+                  <FontAwesomeIconView boundsType="VISUAL" fill="#bcbcbc" glyphName="REPLY" size="35" />
+               </graphic>
+            </JFXButton>
+            <HBox alignment="CENTER" layoutX="215.0" layoutY="241.0" prefHeight="45.0" prefWidth="171.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="214.0">
+               <children>
+                  <JFXButton fx:id="dynamicBtn" buttonType="RAISED" focusTraversable="false" onMouseClicked="#addBtnAction" prefHeight="45.0" text="RESERVAR" />
+               </children>
+            </HBox>
+            <Label fx:id="scoreLbl" alignment="CENTER" layoutX="215.0" layoutY="15.0" prefHeight="45.0" prefWidth="171.0" text="0 - 0" textFill="#0d7935">
+               <font>
+                  <Font size="46.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</JFXDialogLayout>
