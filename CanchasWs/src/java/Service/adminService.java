@@ -38,4 +38,9 @@ public class adminService {
         }
            return admin; 
         }  
+    
+    public void imp(){
+        System.out.println("dfdc");
     }
+    
+ }
