@@ -6,6 +6,8 @@
 package Service;
 
 import Model.Administrador;
+import Model.Cancha;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -37,5 +39,21 @@ public class adminService {
                admin = null;
         }
            return admin; 
+        }  
+    
+    public List getAdminList(Long id){
+        Administrador admin; 
+        List<Cancha> canchaList;
+        Query qryusu = em.createNamedQuery("Administrador.findByAdmId",Administrador.class);
+        qryusu.setParameter("admId",id);
+   
+         try {
+               admin = (Administrador) qryusu.getSingleResult();
+               canchaList = admin.getCanchaList();
+           
+        } catch (NoResultException ex) {
+               canchaList = null;
+        }
+           return canchaList; 
         }  
     }

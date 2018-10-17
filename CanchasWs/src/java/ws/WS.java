@@ -6,9 +6,11 @@
 package ws;
 
 import Model.Administrador;
+import Model.AdministradorDto;
 import Model.Equipo;
 import Service.adminService;
 import Service.equipoService;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
@@ -43,6 +45,42 @@ public class WS {
        Equipo equipo;
        equipo = equService.getEquipo(usu, contra);
         return equipo;
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "getAdList")
+    public List getAdList(@WebParam(name = "id") Long id) {
+        
+        return adService.getAdminList(id);
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "getEquiposList")
+    public List getEquiposList() {
+        
+        return equService.fillEquipos();
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "jj")
+    public AdministradorDto jj() {
+        //TODO write your implementation code here:
+        return null;
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "getRetoList")
+    public List getRetoList(@WebParam(name = "parameterdfdf") AdministradorDto parameterdfdf) {
+        //TODO write your implementation code here:
+        return null;
     }
     
     

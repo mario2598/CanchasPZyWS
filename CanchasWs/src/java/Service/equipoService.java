@@ -7,6 +7,8 @@ package Service;
 
 import Model.Administrador;
 import Model.Equipo;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -36,6 +38,13 @@ public class equipoService {
                equipo = null;
         }
         return equipo;
+    }
+    
+    public List fillEquipos(){
+        List<Equipo> equipoList;
+        Query tmQry = em.createNamedQuery("Equipo.findAll", Equipo.class);
+        equipoList = tmQry.getResultList();
+        return equipoList;
     }
         
        

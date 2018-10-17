@@ -36,13 +36,13 @@ public class AdministradorDto {
         this.canchaList = canchaList;
     }
      
-     public AdministradorDto(Administrador admin){
+   /* public AdministradorDto(){
         this();//llama el constructor por defecto para que inicialice
         this.admId.set(admin.getAdmId().toString());
         this.admUsu.set(admin.getAdmUsu());
         this.admPassword.set(admin.getAdmPassword()); 
         this.canchaList =  admin.getCanchaList();
-    }
+    }*/
      
      public AdministradorDto(AdministradorDto admin){
         this();//llama el constructor por defecto para que inicialice

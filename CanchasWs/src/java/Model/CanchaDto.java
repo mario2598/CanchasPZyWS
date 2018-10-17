@@ -3,24 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package canchaspz.model;
+package Model;
 
-import canchaspz.util.DateUtil;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import util.DateUtil;
 
 /**
  *
- * @author Chris
+ * @author mario
  */
+@XmlRootElement(name = "CanchaDto")
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 public class CanchaDto {
-    //Attributes
+    /*
     public SimpleStringProperty ID;
-//    private Administrador admId;
+    private Administrador admId;
     public SimpleStringProperty posterUrl;
     public SimpleStringProperty nombre;
     public SimpleStringProperty tel;
@@ -38,7 +41,7 @@ public class CanchaDto {
     //Constructors
     public CanchaDto(){
         this.ID = new SimpleStringProperty();
-//        this.admId = null;
+        this.admId = null;
         this.posterUrl = new SimpleStringProperty();
         this.nombre = new SimpleStringProperty();
         this.direccion = new SimpleStringProperty();
@@ -83,15 +86,19 @@ public class CanchaDto {
         this.tel.set(cancha.getCanTel().toString());
         this.cantJugadores.set(cancha.getCanCantJugadores().toString());
         this.direccion.set(cancha.getCanDireccion());
-        this.latitud.set(cancha.getCanLatitud().toString());
-        this.longitud.set(cancha.getCanLongitud().toString());
+        try{
+            this.latitud.set(cancha.getCanLatitud().toString());
+            this.longitud.set(cancha.getCanLongitud().toString());
+        } catch (NullPointerException ex){
+            
+        }
         this.abre.set(cancha.getCanAbre().toString());
         this.cierra.set(cancha.getCanCierra().toString());
         this.precioDia.set(cancha.getCanPrecioDia().toString());
         this.precioNoches.set(cancha.getCanPrecioNoches().toString());
         this.matches = cancha.getMatchList();
         this.retos =  cancha.getRetoList();
-//        this.admId = cancha.getAdmId();
+        this.admId = cancha.getAdmId();
     }
     
     public void refreshData(CanchaDto cancha){
@@ -109,7 +116,7 @@ public class CanchaDto {
         this.precioNoches.set(cancha.getCanPrecioNoches().toString());
         this.matches = cancha.getMatchList();
         this.retos =  cancha.getRetoList();
-//        this.admId = cancha.getAdmId();
+        this.admId = cancha.getAdmId();
     }
     
     public boolean isOpen(Integer hour){
@@ -134,102 +141,13 @@ public class CanchaDto {
       //  this.matches.add(match);
       this.matches.add(match);
     }
-    
-     public MatchDto getFromList(String id){
-        return null;
-      //  return matches.stream().filter(c -> c.getMatId().equals(id)).findAny().orElse(null);
-    }
-    
-     public HashMap<String, Integer> getProfitReportInfo(Date startDate,Date endDate){
-        HashMap<String,Integer> info=new HashMap<>();
-        Integer spacesAtDay=getSpacesAtDay();
-        
-        info.put("totalSpaces", getTotalSpacesIntoDates(startDate,endDate,spacesAtDay));
-        info.put("occupedSpaces", getOccupedSpaces(startDate,endDate));
-        info.put("earnedMoney", getEarnedMoney(startDate,endDate));
-        info.put("emptySpaces", getEmptySpaces(startDate,endDate,spacesAtDay));    
-        
-        return info;
-    }
-    
-    public HashMap<String, SimpleStringProperty> getProfitReportInfoProp(Date startDate,Date endDate){
-        HashMap<String,SimpleStringProperty> info=new HashMap<>();
-        Integer spacesAtDay=getSpacesAtDay();
-        
-        info.put("totalSpaces", new SimpleStringProperty(getTotalSpacesIntoDates(startDate,endDate,spacesAtDay).toString()));
-        info.put("occupedSpaces", new SimpleStringProperty(getOccupedSpaces(startDate,endDate).toString()));
-        info.put("earnedMoney", new SimpleStringProperty(getEarnedMoney(startDate,endDate).toString()));
-        info.put("emptySpaces", new SimpleStringProperty(getEmptySpaces(startDate,endDate,spacesAtDay).toString()));    
-        
-        System.out.println("espacios disponibles por día :"+spacesAtDay);
-        System.out.println("espacios entre esas fechas :"+getTotalSpacesIntoDates(startDate,endDate,spacesAtDay).toString());  
-        System.out.println("partidos jugados entre esas fechas :"+getOccupedSpaces(startDate,endDate).toString());
-        System.out.println("espacios vacíos :"+getEmptySpaces(startDate,endDate,spacesAtDay));
-        
-        return info;
-    }
-    
-    public Integer getSpacesAtDay(){
-        Cancha field = new Cancha(this);
-        Integer open=field.getCanAbre().intValue();
-        Integer close=field.getCanCierra().intValue();
-        Integer spacesAtDay=close-open;
-        
-        return spacesAtDay;
-    }
-    
     /**
      * retorna la cantidad de partidos que se jugaron entre dos fechas
      * @param startDate
      * @param endDate
      * @return 
-     */
-    public Integer getOccupedSpaces(Date startDate,Date endDate){
-        //calcula los partidos jugados entre dos fechas
-        Cancha field = new Cancha(this);
-        Integer occupedSpaces=0;
-        ArrayList<Match> arrayListMatches=new ArrayList<>();
-        arrayListMatches.addAll(this.getMatches());
-        occupedSpaces = arrayListMatches.stream().filter((m) -> ((m.getMatDate().compareTo(startDate))==1||((m.getMatDate().compareTo(startDate))==0)
-                &&(m.getMatDate().compareTo(endDate)==-1)||(m.getMatDate().compareTo(endDate)==0))&&"s".equals(m.getMatDisputado())).map((_item) -> 1).reduce(occupedSpaces, Integer::sum);
-        return occupedSpaces;
-    }
-    
-    /**
-     * retorna la cantidad de dinero ganado entre dos fechas,según la cantidad de partidos disputados y el cobro de la cancha
-     * @param startDate
-     * @param endDate
-     * @return 
-     */
-    public Integer getEarnedMoney(Date startDate,Date endDate){
-        //calcula el dinero recaudadoentre dos fechas
-        Cancha field = new Cancha(this);
-        Integer earnedMoney=0;
-        ArrayList<Match> arrayListMatches=new ArrayList<>();
-        arrayListMatches.addAll(this.getMatches());
-        earnedMoney = arrayListMatches.stream().filter((m) -> ((m.getMatDate().compareTo(startDate))==1||((m.getMatDate().compareTo(startDate))==0)
-                &&(m.getMatDate().compareTo(endDate)==-1)||(m.getMatDate().compareTo(endDate)==0))
-                &&"s".equals(m.getMatDisputado())).map((m) -> m.getMatCobro().intValue()).reduce(earnedMoney, Integer::sum);
-        return earnedMoney;
-    }
-    
-    public Integer getTotalSpacesIntoDates(Date startDate,Date endDate,Integer spacesAtDay){
-        //cuenta la cantidad de espacios que hubieron entre dos fechas
-        Integer totalSpaces=0;
-        for(Integer i=0;i<DateUtil.daysUntil2Dates(startDate, endDate);i++){
-            totalSpaces+=spacesAtDay;
-        }
-        
-        return totalSpaces;
-    }
-    
-    public Integer getEmptySpaces(Date startDate,Date endDate,Integer spacesAtDay){
-        Integer totalSpaces=getTotalSpacesIntoDates(startDate,endDate,spacesAtDay);
-        Integer occupedSpaces=getOccupedSpaces(startDate,endDate);
-        return totalSpaces-occupedSpaces;
-    }
      
-    //Setters and Getters
+
     public Long getCanID() {
         if(ID.get()!=null)
             return Long.valueOf(ID.get());
@@ -330,14 +248,14 @@ public class CanchaDto {
         this.precioNoches.set(precioNoches.toString());
     }
 
-    /*public Administrador getAdmId() {
+    public Administrador getAdmId() {
         return admId;
     }
 
     public void setAdmId(Administrador admId) {
         this.admId = admId;
     }
-*/
+
     public List<Match> getMatchList() {
         return matches;
     }
@@ -385,5 +303,5 @@ public class CanchaDto {
     public void setNombre(String nombre) {
         this.nombre.set(nombre);
     }
-    
+    */
 }

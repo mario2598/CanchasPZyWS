@@ -84,9 +84,9 @@ public class Cancha implements Serializable {
     private String canNombre;
     @Column(name = "CAN_DIRECCION")
     private String canDireccion;
-    @JoinColumn(name = "ADM_ID", referencedColumnName = "ADM_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Administrador admId;
+  //  @JoinColumn(name = "ADM_ID", referencedColumnName = "ADM_ID")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Administrador admId;
 
     public Cancha() {
     }
@@ -113,7 +113,7 @@ public class Cancha implements Serializable {
         this.canNombre = field.getCanNombre();
         this.canDireccion = field.getCanDireccion();
         this.canUrl = field.getCanUrl();
-        this.admId = field.getAdmId();
+//        this.admId = field.getAdmId();
         this.canAbre = field.getCanAbre();
         this.canCantJugadores = field.getCanCantJugadores();
         this.canCierra = field.getCanCierra();
@@ -214,13 +214,13 @@ public class Cancha implements Serializable {
         this.canLongitud = canLongitud;
     }
 
-    public Administrador getAdmId() {
-        return admId;
-    }
+//    public Administrador getAdmId() {
+ //       return admId;
+ //   }
 
-    public void setAdmId(Administrador admId) {
-        this.admId = admId;
-    }
+ //   public void setAdmId(Administrador admId) {
+  //      this.admId = admId;
+  //  }
     
     @Override
     public int hashCode() {

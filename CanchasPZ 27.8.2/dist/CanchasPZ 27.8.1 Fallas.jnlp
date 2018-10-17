@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="CanchasPZ_27.8.1_Fallas.jar" size="2671388" download="eager" />
+    <jar href="CanchasPZ_27.8.1_Fallas.jar" size="2671033" download="eager" />
     <jar href="lib\GMapsFX-2.10.0.jar" size="154471" download="eager" />
     <jar href="lib\commons-collections4-4.1.jar" size="751238" download="eager" />
     <jar href="lib\eclipselink.jar" size="8478776" download="eager" />

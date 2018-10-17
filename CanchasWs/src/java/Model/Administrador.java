@@ -6,9 +6,9 @@
 package Model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,40 +40,40 @@ public class Administrador implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @NotNull
+   // @NotNull
     @Column(name = "ADM_ID")
-    private BigDecimal admId;
+    private Long admId;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
+ //   @NotNull
+  //  @Size(min = 1, max = 30)
     @Column(name = "ADM_USU")
     private String admUsu;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
+ //   @NotNull
+  //  @Size(min = 1, max = 30)
     @Column(name = "ADM_PASSWORD")
     private String admPassword;
-    @OneToMany(mappedBy = "admId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "admId", fetch = FetchType.LAZY)
     private List<Cancha> canchaList;
 
     public Administrador() {
     }
 
-    public Administrador(BigDecimal admId) {
+    public Administrador(Long admId) {
         this.admId = admId;
     }
 
-    public Administrador(BigDecimal admId, String admUsu, String admPassword) {
+    public Administrador(Long admId, String admUsu, String admPassword) {
         this.admId = admId;
         this.admUsu = admUsu;
         this.admPassword = admPassword;
     }
 
-    public BigDecimal getAdmId() {
+    public Long getAdmId() {
         return admId;
     }
 
-    public void setAdmId(BigDecimal admId) {
+    public void setAdmId(Long admId) {
         this.admId = admId;
     }
 
@@ -97,7 +97,6 @@ public class Administrador implements Serializable {
     public List<Cancha> getCanchaList() {
         return canchaList;
     }
-
     public void setCanchaList(List<Cancha> canchaList) {
         this.canchaList = canchaList;
     }
