@@ -41,6 +41,7 @@ public class adminService {
            return admin; 
         }  
     
+<<<<<<< HEAD
     public List getAdminList(Long id){
         Administrador admin; 
         List<Cancha> canchaList;
@@ -56,4 +57,10 @@ public class adminService {
         }
            return canchaList; 
         }  
+=======
+    public void imp(){
+        System.out.println("dfdc");
+>>>>>>> master
     }
+    
+ }
