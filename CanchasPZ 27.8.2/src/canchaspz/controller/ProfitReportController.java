@@ -82,18 +82,17 @@ public class ProfitReportController extends DialogController implements Initiali
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // todo
         //this.exportButton.setDisable(true);
         
         this.dpStartDate.setOnAction(event->{
             if(this.dpEndDate.getValue()!=null){
                 if(this.field!=null)
-                //bindField();
-                bindPrueba();
+                bindField();
+                //bindPrueba();
                 
                 else 
-                   //bindAdmin();
-                    bindPrueba();
+                   bindAdmin();
+                    //bindPrueba();
                 this.exportButton.setDisable(false);
             }
                 
@@ -102,11 +101,11 @@ public class ProfitReportController extends DialogController implements Initiali
             
             if(this.dpStartDate.getValue()!=null){
                 if(this.field!=null)
-                //bindField();
-                bindPrueba();
+                bindField();
+                //bindPrueba();
                 else
-                   //bindAdmin();
-                    bindPrueba();
+                   bindAdmin();
+                    //bindPrueba();
                 this.exportButton.setDisable(false);
             }
         });
@@ -117,27 +116,28 @@ public class ProfitReportController extends DialogController implements Initiali
     @Override
     public void initialize() {
         this.exportButton.setDisable(true);
-        //todo descomentar
-        /*if(AppContext.getInstance().getCanchaActual()!=null)
+        //esto estaba comentado para pruebas
+        if(AppContext.getInstance().getCanchaActual()!=null)
          this.field=AppContext.getInstance().getCanchaActual();
         else
             this.admin=AppContext.getInstance().getAdmin();
-         unbind();*/
-        this.field=new CanchaDto();//todo quitar
+         unbind();
+        //this.field=new CanchaDto();//todo prueba
     }
 
     @FXML
     private void exportToExcel(ActionEvent event) throws FileNotFoundException, IOException {
         
+        //obtiene las fechas del date picker
         Date d1= DateUtil.LocalDate2Date(dpStartDate.getValue());
         Date d2= DateUtil.LocalDate2Date(dpEndDate.getValue());
         
-        
+        //valida que la primera sea mayor a la segunda
         if(d1!=null&&d2!=null&&d1.before(d2)){
             if(AppContext.getInstance().getCanchaActual()!=null)
-            url=AppContext.getInstance().getCanchaActual().getNombre()+".xls";
+            url=AppContext.getInstance().getCanchaActual().getNombre()+".xls";//obtiene nombre del archivo según lacanchaDto
         else
-            url="prueba.xls";//obtiene nombre del archivo
+            url="prueba.xls"; //nombre prueba
         
         openFile();//abre el archivo a partir del directorio + el nombre del archivo(url)
         
@@ -291,7 +291,9 @@ public class ProfitReportController extends DialogController implements Initiali
             "fecha final: "+this.dpEndDate.getValue().toString(),
         };
         
+        //información del reporte
         createInfoRow(infoData);
+        //fila de cabeceras
         createRow(sheet.getLastRowNum()+2,headers,headerStyle);
         
         //celdas se ajustan al tamaño adecuado para el contenido
@@ -301,7 +303,8 @@ public class ProfitReportController extends DialogController implements Initiali
     }
     
     private void createDetailRows(){
-        ArrayList<String[]> array = field.getDayReportPrueba(DateUtil.LocalDate2Date(dpStartDate.getValue()),DateUtil.LocalDate2Date(dpEndDate.getValue()));
+        //ArrayList<String[]> array = field.getDayReportPrueba(DateUtil.LocalDate2Date(dpStartDate.getValue()),DateUtil.LocalDate2Date(dpEndDate.getValue()));
+        ArrayList<String[]> array = field.getDayReport(DateUtil.LocalDate2Date(dpStartDate.getValue()),DateUtil.LocalDate2Date(dpEndDate.getValue()));
         for(String[] data:array){
             createRow(sheet.getLastRowNum()+1,data,style);
         }

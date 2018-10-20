@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
-import static jdk.nashorn.internal.objects.NativeDate.getTime;
 
 /**
  *
