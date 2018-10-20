@@ -6,10 +6,10 @@
 package Model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,7 +45,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Cancha.findByCanTel", query = "SELECT c FROM Cancha c WHERE c.canTel = :canTel")
     , @NamedQuery(name = "Cancha.findByCanCierra", query = "SELECT c FROM Cancha c WHERE c.canCierra = :canCierra")
     , @NamedQuery(name = "Cancha.findByCanAbre", query = "SELECT c FROM Cancha c WHERE c.canAbre = :canAbre")
-    , @NamedQuery(name = "Cancha.findByCanUrl", query = "SELECT c FROM Cancha c WHERE c.canUrl = :canUrl")})
+    , @NamedQuery(name = "Cancha.findByCanUrl", query = "SELECT c FROM Cancha c WHERE c.canUrl = :canUrl")
+    , @NamedQuery(name = "Cancha.findByAdminId", query = "SELECT c FROM Cancha c WHERE c.admId = :adminId")})
 public class Cancha implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,7 +55,7 @@ public class Cancha implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CAN_ID")
-    private BigDecimal canId;
+    private Long canId;
     @Size(max = 30)
     @Column(name = "CAN_NOMBRE")
     private String canNombre;
@@ -62,44 +63,85 @@ public class Cancha implements Serializable {
     @Column(name = "CAN_DIRECCION")
     private String canDireccion;
     @Column(name = "CAN_CANT_JUGADORES")
-    private BigInteger canCantJugadores;
+    private Integer canCantJugadores;
     @Column(name = "CAN_LATITUD")
-    private BigInteger canLatitud;
+    private Integer canLatitud;
     @Column(name = "CAN_LONGITUD")
-    private BigInteger canLongitud;
+    private Integer canLongitud;
     @Column(name = "CAN_PRECIO_DIA")
-    private BigInteger canPrecioDia;
+    private Integer canPrecioDia;
     @Column(name = "CAN_PRECIO_NOCHES")
-    private BigInteger canPrecioNoches;
+    private Integer canPrecioNoches;
     @Column(name = "CAN_TEL")
-    private BigInteger canTel;
+    private Integer canTel;
     @Column(name = "CAN_CIERRA")
-    private BigInteger canCierra;
+    private Integer canCierra;
     @Column(name = "CAN_ABRE")
-    private BigInteger canAbre;
+    private Integer canAbre;
     @Size(max = 200)
     @Column(name = "CAN_URL")
     private String canUrl;
     @JoinColumn(name = "ADM_ID", referencedColumnName = "ADM_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Administrador admId;
-    @OneToMany(mappedBy = "canchaId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "canchaId", fetch = FetchType.LAZY)
     private List<Reto> retoList;
-    @OneToMany(mappedBy = "canId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "canId", fetch = FetchType.LAZY)
     private List<Match> matchList;
 
     public Cancha() {
     }
 
-    public Cancha(BigDecimal canId) {
+    public Cancha(Long canId) {
         this.canId = canId;
     }
+    
+    public Cancha(CanchaDto canchaDto){
+        if(canchaDto.getCanId()!=null){
+            this.canId = canchaDto.getCanId();
+        }
+        copiarInfo(canchaDto);
+    }
+    
+    public void copiarInfo(CanchaDto canchaDto){
+        this.canNombre = canchaDto.getCanNombre();
+        this.canDireccion = canchaDto.getCanDireccion();
+        this.canCantJugadores = canchaDto.getCanCantJugadores();
+        this.canLatitud = canchaDto.getCanLatitud();
+        this.canLongitud = canchaDto.getCanLongitud();
+        this.canPrecioDia = canchaDto.getCanPrecioDia();
+        this.canPrecioNoches = canchaDto.getCanPrecioNoches();
+        this.canTel = canchaDto.getCanTel();
+        this.canCierra = canchaDto.getCanCierra();
+        this.canAbre = canchaDto.getCanAbre();
+        this.canUrl = canchaDto.getCanUrl();
+    }
+    
+    public void convertirListaPartidos(List<MatchDto> list){
+        this.matchList = new ArrayList<>();
+        for(MatchDto matchDto : list){
+            Match newM = new Match(matchDto);
+            newM.setCanId(this);
+            newM.copiarSoloIDEquipos(matchDto);
+            this.matchList.add(newM);
+        }
+    }
+    
+    public void convertirListaRetos(List<RetoDto> list){
+        this.retoList = new ArrayList<>();
+        for(RetoDto retoDto : list){
+            Reto newR = new Reto(retoDto);
+            newR.setCanchaId(this);
+            newR.copiarSoloIDEquipos(retoDto);
+            this.retoList.add(newR);
+        }
+    }
 
-    public BigDecimal getCanId() {
+    public Long getCanId() {
         return canId;
     }
 
-    public void setCanId(BigDecimal canId) {
+    public void setCanId(Long canId) {
         this.canId = canId;
     }
 
@@ -119,67 +161,67 @@ public class Cancha implements Serializable {
         this.canDireccion = canDireccion;
     }
 
-    public BigInteger getCanCantJugadores() {
+    public Integer getCanCantJugadores() {
         return canCantJugadores;
     }
 
-    public void setCanCantJugadores(BigInteger canCantJugadores) {
+    public void setCanCantJugadores(Integer canCantJugadores) {
         this.canCantJugadores = canCantJugadores;
     }
 
-    public BigInteger getCanLatitud() {
+    public Integer getCanLatitud() {
         return canLatitud;
     }
 
-    public void setCanLatitud(BigInteger canLatitud) {
+    public void setCanLatitud(Integer canLatitud) {
         this.canLatitud = canLatitud;
     }
 
-    public BigInteger getCanLongitud() {
+    public Integer getCanLongitud() {
         return canLongitud;
     }
 
-    public void setCanLongitud(BigInteger canLongitud) {
+    public void setCanLongitud(Integer canLongitud) {
         this.canLongitud = canLongitud;
     }
 
-    public BigInteger getCanPrecioDia() {
+    public Integer getCanPrecioDia() {
         return canPrecioDia;
     }
 
-    public void setCanPrecioDia(BigInteger canPrecioDia) {
+    public void setCanPrecioDia(Integer canPrecioDia) {
         this.canPrecioDia = canPrecioDia;
     }
 
-    public BigInteger getCanPrecioNoches() {
+    public Integer getCanPrecioNoches() {
         return canPrecioNoches;
     }
 
-    public void setCanPrecioNoches(BigInteger canPrecioNoches) {
+    public void setCanPrecioNoches(Integer canPrecioNoches) {
         this.canPrecioNoches = canPrecioNoches;
     }
 
-    public BigInteger getCanTel() {
+    public Integer getCanTel() {
         return canTel;
     }
 
-    public void setCanTel(BigInteger canTel) {
+    public void setCanTel(Integer canTel) {
         this.canTel = canTel;
     }
 
-    public BigInteger getCanCierra() {
+    public Integer getCanCierra() {
         return canCierra;
     }
 
-    public void setCanCierra(BigInteger canCierra) {
+    public void setCanCierra(Integer canCierra) {
         this.canCierra = canCierra;
     }
 
-    public BigInteger getCanAbre() {
+    public Integer getCanAbre() {
         return canAbre;
     }
 
-    public void setCanAbre(BigInteger canAbre) {
+    public void setCanAbre(Integer canAbre) {
         this.canAbre = canAbre;
     }
 

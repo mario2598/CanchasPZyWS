@@ -7,7 +7,6 @@ package Model;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -19,94 +18,72 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "AdministradorDto")
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 public class AdministradorDto {
-  
-     public String adminId;
-     public String adminUsu;
-     public  String adminPassword;
-     public List<Cancha> canchaList;
+    //Attributes
+    public Long adminId;
+    public String adminUsu;
+    public String adminPassword;
+    public List<CanchaDto> canchaList;
      
-     public AdministradorDto(){
+    //Constructors
+    public AdministradorDto(){
+        
     }
-     
-    public AdministradorDto(Administrador admin) {
+    
+    public AdministradorDto(Administrador admin){
         if(admin.getAdmId() != null){
-           this.adminId = admin.getAdmId().toString(); 
+            this.adminId = admin.getAdmId();
         }
-        canchaList = admin.getCanchaList();       
+        duplicarInfo(admin);
+    }
+    
+    //Methods
+    public void duplicarInfo(Administrador admin){
         this.adminUsu = admin.getAdmUsu();
         this.adminPassword = admin.getAdmPassword();
-        this.canchaList = admin.getCanchaList();
+    }
+    
+    public void convertirListaCanchas(List<Cancha> list){
+        this.canchaList = new ArrayList<>();
+        for(Cancha cancha : list){
+            CanchaDto newC = new CanchaDto(cancha);
+            newC.setAdmId(this);
+            newC.convertirListaPartidos(cancha.getMatchList());
+            newC.convertirListaRetos(cancha.getRetoList());
+            canchaList.add(newC);
+        }
+    }
+    
+    //Setters and Getters
+    public Long getAdminId() {
+        return adminId;
     }
 
-    private void convertirList(ArrayList<CanchaDto> list){
-         Cancha cancha;
-         for(CanchaDto canchaDto : list){
-       //      cancha = new Cancha(canchaDto);
-         //    canchaList.add(cancha);
-         }
-             
-     }
-
-    public List<Cancha> getCanchaList() {
-        return canchaList;
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
 
-    public void setCanchaList(ArrayList<Cancha> canchaList) {
-        this.canchaList = canchaList;
-    }
-     
-     private void convertirList(List<Cancha> list){
-         CanchaDto canchaDto;
-         for(Cancha cancha : list){
-         //    canchaDto = new CanchaDto(cancha);
-     //        canchaList.add(canchaDto);
-         }
-             
-     }
-     
-    public Long getAdmId() {
-        if(adminId== null || adminId.isEmpty())
-            return null;
-        else
-            return Long.valueOf(adminId);
+    public String getAdminUsu() {
+        return adminUsu;
     }
 
-       public void setAdmId(String id) {
-        adminId= id;
+    public void setAdminUsu(String adminUsu) {
+        this.adminUsu = adminUsu;
     }
-       
-     public String getAdmUsu() {
-            return adminUsu;   
-     }
 
-       public void setAdmUsu(String usu) {
-        adminUsu = usu;
-     }
-       
-       public String getAdmPassword() {
+    public String getAdminPassword() {
         return adminPassword;
     }
 
-    public void setAdmPassword(String password) {
-        adminPassword = password;
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
     }
-    public void addToList(Cancha c){
-       canchaList.add(c);
-    }
-    
-    /**
-      * obtiene la información del reporte general
-      * @param startDate
-      * @param endDate
-      * @return 
-      */
 
-    /**
-      * obtiene la información del reporte general
-      * @param startDate
-      * @param endDate
-      * @return 
-      */
+    public List<CanchaDto> getCanchaList() {
+        return canchaList;
+    }
+
+    public void setCanchaList(List<CanchaDto> canchaList) {
+        this.canchaList = canchaList;
+    }
     
-  
 }

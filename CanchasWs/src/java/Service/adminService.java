@@ -6,12 +6,10 @@
 package Service;
 
 import Model.Administrador;
-import Model.Cancha;
-import java.util.List;
-import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -26,41 +24,71 @@ public class adminService {
 
     @PersistenceContext(unitName = "CanchasWsPU") //asi se crean  estas  los service y se inyectan en la parte de WS con la anotacion @EJB
     private EntityManager em;
+    private EntityTransaction et;
     
     public Administrador getAdmin(String usu, String contra){
         Administrador admin; 
         Query qryUsuContra = em.createNamedQuery("Administrador.findByAdmPassword",Administrador.class);
         qryUsuContra.setParameter("admPassword",contra);
         qryUsuContra.setParameter("admUsu",usu);
-         try {
-               admin = (Administrador) qryUsuContra.getSingleResult();
-           
+        try {
+            admin = (Administrador) qryUsuContra.getSingleResult();
         } catch (NoResultException ex) {
-               admin = null;
+            admin = null;
         }
-           return admin; 
-        }  
+        return admin; 
+    }
     
-<<<<<<< HEAD
-    public List getAdminList(Long id){
-        Administrador admin; 
-        List<Cancha> canchaList;
-        Query qryusu = em.createNamedQuery("Administrador.findByAdmId",Administrador.class);
-        qryusu.setParameter("admId",id);
-   
-         try {
-               admin = (Administrador) qryusu.getSingleResult();
-               canchaList = admin.getCanchaList();
-           
-        } catch (NoResultException ex) {
-               canchaList = null;
+    public Administrador getAdmin(Long adminId){
+        Administrador admin;
+        Query qry = em.createNamedQuery("Administrador.findByAdmId", Administrador.class);
+        qry.setParameter("admId", adminId);
+        try{
+            admin = (Administrador) qry.getSingleResult();
+        } catch(NoResultException ex){
+            admin = null;
         }
-           return canchaList; 
-        }  
-=======
-    public void imp(){
-        System.out.println("dfdc");
->>>>>>> master
+        return admin;
+    }
+    
+    /**
+     * Persistencia de un administrador
+     * Si este ya existe en la base de datos se actualizaran sus datos
+     * @param admin
+     * @return 
+     */
+    public boolean guardarAdmin(Administrador admin){
+        boolean guardado;
+        try{
+            et = em.getTransaction();
+            et.begin();
+            Administrador adminAux;
+            if(admin.getAdmId()!=null){
+                Query qryUsu = em.createNamedQuery("Administrador.findByAdmUsu",Administrador.class);            
+                qryUsu.setParameter("admUsu", admin.getAdmUsu());   
+                try {
+                    adminAux = (Administrador) qryUsu.getSingleResult();
+                } catch (NoResultException ex) {
+                    adminAux = null;
+                }
+            } else {
+                adminAux = null;
+            }
+            if(adminAux != null){
+                adminAux = admin;
+                em.merge(adminAux);
+                guardado = true;
+            } else {
+                adminAux = admin;
+                em.persist(adminAux);
+                et.commit();
+                guardado = true;
+            }
+        }catch(Exception ex){
+            et.rollback();
+            guardado = false;
+        }
+        return guardado;
     }
     
  }

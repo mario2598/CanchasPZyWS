@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package canchaspz.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,20 +39,15 @@ public class Administrador implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-   // @NotNull
     @Column(name = "ADM_ID")
     private Long admId;
     @Basic(optional = false)
- //   @NotNull
-  //  @Size(min = 1, max = 30)
     @Column(name = "ADM_USU")
     private String admUsu;
     @Basic(optional = false)
- //   @NotNull
-  //  @Size(min = 1, max = 30)
     @Column(name = "ADM_PASSWORD")
     private String admPassword;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "admId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "admId", fetch = FetchType.LAZY)
     private List<Cancha> canchaList;
 
     public Administrador() {
@@ -61,36 +56,31 @@ public class Administrador implements Serializable {
     public Administrador(Long admId) {
         this.admId = admId;
     }
-    
-    public Administrador(AdministradorDto adminDto){
-        if(adminDto.getAdminId()!=null){
-            this.admId = adminDto.getAdminId();
-        }
-        copiarInfo(adminDto);
-    }
 
     public Administrador(Long admId, String admUsu, String admPassword) {
         this.admId = admId;
         this.admUsu = admUsu;
         this.admPassword = admPassword;
     }
-    
-    public void copiarInfo(AdministradorDto adminDto){
-        this.admUsu = adminDto.getAdminUsu();
-        this.admPassword = adminDto.getAdminPassword();
-    }
-    
-    public void convertirListaCanchas(List<CanchaDto> list){
-        this.canchaList = new ArrayList<>();
-        for(CanchaDto cancha : list){
-            Cancha newC = new Cancha(cancha);
-            newC.setAdmId(this);
-            newC.convertirListaPartidos(cancha.getMatchList());
-            newC.convertirListaRetos(cancha.getRetoList());
-            canchaList.add(newC);
+    public Administrador(AdministradorDto admin) {
+        if(admin.getAdmId() != null){
+           this.admId = Long.valueOf(admin.getAdmId()); 
         }
+        canchaList = admin.getCanchaList();       
+        this.admUsu = admin.getAdmUsu();
+        this.admPassword = admin.getAdmPassword();
+        this.canchaList = admin.getCanchaList();
     }
 
+    private void convertirList(ArrayList<CanchaDto> list){
+         Cancha cancha;
+         for(CanchaDto canchaDto : list){
+             cancha = new Cancha(canchaDto);
+             canchaList.add(cancha);
+         }
+             
+     }
+    
     public Long getAdmId() {
         return admId;
     }
@@ -119,6 +109,7 @@ public class Administrador implements Serializable {
     public List<Cancha> getCanchaList() {
         return canchaList;
     }
+
     public void setCanchaList(List<Cancha> canchaList) {
         this.canchaList = canchaList;
     }
@@ -137,7 +128,7 @@ public class Administrador implements Serializable {
             return false;
         }
         Administrador other = (Administrador) object;
-        if((this.admId == null && other.admId != null) || (this.admId != null && !this.admId.equals(other.admId))) {
+        if ((this.admId == null && other.admId != null) || (this.admId != null && !this.admId.equals(other.admId))) {
             return false;
         }
         return true;
@@ -145,7 +136,7 @@ public class Administrador implements Serializable {
 
     @Override
     public String toString() {
-        return "Model.Administrador[ admId=" + admId + " ]";
+        return "canchaspz.model.Administrador[ admId=" + admId + " ]";
     }
     
 }

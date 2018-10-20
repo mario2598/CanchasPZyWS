@@ -6,10 +6,10 @@
 package Model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -53,7 +53,7 @@ public class Equipo implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "EQU_ID")
-    private BigDecimal equId;
+    private Long equId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
@@ -75,40 +75,92 @@ public class Equipo implements Serializable {
     @Column(name = "EQU_URL")
     private String equUrl;
     @Column(name = "EQU_TEL_JUG2")
-    private BigInteger equTelJug2;
+    private Integer equTelJug2;
     @Column(name = "EQU_TEL_JUG1")
-    private BigInteger equTelJug1;
+    private Integer equTelJug1;
     @Column(name = "EQU_PTS")
-    private BigInteger equPts;
+    private Integer equPts;
     @JoinColumn(name = "RETO_ID", referencedColumnName = "RETO_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Reto retoId;
-    @OneToMany(mappedBy = "equipo1Id", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipo1Id", fetch = FetchType.LAZY)
     private List<Reto> retoList;
-    @OneToMany(mappedBy = "equipo2Id", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipo2Id", fetch = FetchType.LAZY)
     private List<Reto> retoList1;
-    @OneToMany(mappedBy = "equId2", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equId2", fetch = FetchType.LAZY)
     private List<Match> matchList;
-    @OneToMany(mappedBy = "equId1", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equId1", fetch = FetchType.LAZY)
     private List<Match> matchList1;
 
     public Equipo() {
     }
 
-    public Equipo(BigDecimal equId) {
+    public Equipo(Long equId) {
         this.equId = equId;
     }
+    
+    public Equipo(EquipoDto equipoDto){
+        if(equipoDto.getEquId()!=null){
+            this.equId = equipoDto.getEquId();
+        }
+        copiarInfo(equipoDto);
+    }
+    
+    public void copiarInfo(EquipoDto equipoDto){
+        this.equUsu = equipoDto.getEquUsu();
+        this.equPassword = equipoDto.getEquPassword();
+        this.equNombre = equipoDto.getEquNombre();
+        this.equNomJug1 = equipoDto.getEquNomJug1();
+        this.equNomJug2 = equipoDto.getEquNomJug2();
+        this.equUrl = equipoDto.getUrl();
+        this.equTelJug2 = equipoDto.getEquTelJug1();
+        this.equTelJug1 = equipoDto.getEquTelJug2();
+        this.equPts = equipoDto.getEquPts();
+    }
 
-    public Equipo(BigDecimal equId, String equUsu) {
+    public Equipo(Long equId, String equUsu) {
         this.equId = equId;
         this.equUsu = equUsu;
     }
+    
+    /**
+     * 
+     * @param list Lista de partidos como local (Lado izquierdo)
+     * @param list1 Lista de partidos como visitante (Lado derecho) 
+     */
+    public void convertirListaPartidos(List<MatchDto> list, List<MatchDto> list1){
+        this.matchList = new ArrayList<>();
+        this.matchList1 = new ArrayList<>();
+        for(MatchDto match : list){
+            Match newM = new Match(match);
+            newM.copiarSoloIDEquipos(match);
+            newM.copiarSoloIdCancha(match);
+            matchList.add(newM);
+        }
+        for(MatchDto match : list1){
+            Match newM = new Match(match);
+            newM.copiarSoloIDEquipos(match);
+            newM.copiarSoloIdCancha(match);
+            matchList1.add(newM);
+        }
+    }
+    
+    public void convertirListaRetos(List<RetoDto> list){
+        this.retoList = new ArrayList<>();
+        this.retoList1 = null; //Esta lista de retos siempre estara vacia, una vez aceptado el reto es eliminado de la base de datos
+        for(RetoDto reto : list){
+            Reto newR = new Reto(reto);
+            newR.copiarSoloIDEquipos(reto);
+            newR.copiarSoloIdCancha(reto);
+            retoList.add(newR);
+        }
+    }
 
-    public BigDecimal getEquId() {
+    public Long getEquId() {
         return equId;
     }
 
-    public void setEquId(BigDecimal equId) {
+    public void setEquId(Long equId) {
         this.equId = equId;
     }
 
@@ -160,27 +212,27 @@ public class Equipo implements Serializable {
         this.equUrl = equUrl;
     }
 
-    public BigInteger getEquTelJug2() {
+    public Integer getEquTelJug2() {
         return equTelJug2;
     }
 
-    public void setEquTelJug2(BigInteger equTelJug2) {
+    public void setEquTelJug2(Integer equTelJug2) {
         this.equTelJug2 = equTelJug2;
     }
 
-    public BigInteger getEquTelJug1() {
+    public Integer getEquTelJug1() {
         return equTelJug1;
     }
 
-    public void setEquTelJug1(BigInteger equTelJug1) {
+    public void setEquTelJug1(Integer equTelJug1) {
         this.equTelJug1 = equTelJug1;
     }
 
-    public BigInteger getEquPts() {
+    public Integer getEquPts() {
         return equPts;
     }
 
-    public void setEquPts(BigInteger equPts) {
+    public void setEquPts(Integer equPts) {
         this.equPts = equPts;
     }
 

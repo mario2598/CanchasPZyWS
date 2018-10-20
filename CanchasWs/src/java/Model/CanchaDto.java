@@ -5,14 +5,11 @@
  */
 package Model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import util.DateUtil;
 
 /**
  *
@@ -21,287 +18,189 @@ import util.DateUtil;
 @XmlRootElement(name = "CanchaDto")
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 public class CanchaDto {
-    /*
-    public SimpleStringProperty ID;
-    private Administrador admId;
-    public SimpleStringProperty posterUrl;
-    public SimpleStringProperty nombre;
-    public SimpleStringProperty tel;
-    public SimpleStringProperty cantJugadores;
-    public SimpleStringProperty direccion;
-    public SimpleStringProperty latitud;
-    public SimpleStringProperty longitud;
-    public SimpleStringProperty abre;
-    public SimpleStringProperty cierra;
-    public SimpleStringProperty precioDia;
-    public SimpleStringProperty precioNoches;
-    private List<Match> matches;
-    private List<Reto> retos;
+    //Attributes
+    private Long canId;
+    private String canNombre;
+    private String canDireccion;
+    private Integer canCantJugadores;
+    private Integer canLatitud;
+    private Integer canLongitud;
+    private Integer canPrecioDia;
+    private Integer canPrecioNoches;
+    private Integer canTel;
+    private Integer canCierra;
+    private Integer canAbre;
+    private String canUrl;
+    private AdministradorDto admId;
+    private List<RetoDto> retoList;
+    private List<MatchDto> matchList;
     
     //Constructors
-    public CanchaDto(){
-        this.ID = new SimpleStringProperty();
-        this.admId = null;
-        this.posterUrl = new SimpleStringProperty();
-        this.nombre = new SimpleStringProperty();
-        this.direccion = new SimpleStringProperty();
-        this.cantJugadores = new SimpleStringProperty();
-        this.latitud = new SimpleStringProperty();
-        this.cierra = new SimpleStringProperty();
-        this.abre = new SimpleStringProperty();
-        this.tel = new SimpleStringProperty();
-        this.precioNoches = new SimpleStringProperty();
-        this.precioDia = new SimpleStringProperty();
-        this.longitud = new SimpleStringProperty();
-        this.matches = new ArrayList<>();
-        this.retos = new ArrayList<>();
+    public CanchaDto() {
+        
+    }
+    
+    public CanchaDto(Cancha cancha) {
+        if(cancha.getCanId() != null){
+            this.canId = cancha.getCanId();
+        }
+        duplicarInfo(cancha);
+    }
 
-    }
-    
-    public CanchaDto(String name, String cantJugadores){
-        this();
-        this.nombre.set(name);
-        this.cantJugadores.set(cantJugadores);
-    }
-    
-    public CanchaDto(Cancha cancha){
-        this();
-        if(cancha.getCanId()!=null)
-            this.ID.set(cancha.getCanId().toString());
-        refreshData(cancha);
-    }
-    
-    public CanchaDto(CanchaDto cancha){
-        this();
-        if(cancha.getCanID()!=null)
-            this.ID.set(cancha.getCanID().toString());
-        refreshData(cancha);
-    }
-    
     //Methods
-    public void refreshData(Cancha cancha){
-        this.nombre.set(cancha.getCanNombre());
-        this.direccion.set(cancha.getCanDireccion());
-        this.posterUrl.set(cancha.getCanUrl());
-        this.tel.set(cancha.getCanTel().toString());
-        this.cantJugadores.set(cancha.getCanCantJugadores().toString());
-        this.direccion.set(cancha.getCanDireccion());
-        try{
-            this.latitud.set(cancha.getCanLatitud().toString());
-            this.longitud.set(cancha.getCanLongitud().toString());
-        } catch (NullPointerException ex){
-            
-        }
-        this.abre.set(cancha.getCanAbre().toString());
-        this.cierra.set(cancha.getCanCierra().toString());
-        this.precioDia.set(cancha.getCanPrecioDia().toString());
-        this.precioNoches.set(cancha.getCanPrecioNoches().toString());
-        this.matches = cancha.getMatchList();
-        this.retos =  cancha.getRetoList();
-        this.admId = cancha.getAdmId();
+    public void duplicarInfo(Cancha cancha){
+        this.canNombre = cancha.getCanNombre();
+        this.canDireccion = cancha.getCanDireccion();
+        this.canCantJugadores = cancha.getCanCantJugadores();
+        this.canLatitud = cancha.getCanLatitud();
+        this.canLongitud = cancha.getCanLongitud();
+        this.canPrecioDia = cancha.getCanPrecioDia();
+        this.canPrecioNoches = cancha.getCanPrecioNoches();
+        this.canTel = cancha.getCanTel();
+        this.canCierra = cancha.getCanCierra();
+        this.canAbre = cancha.getCanAbre();
+        this.canUrl = cancha.getCanUrl();
     }
     
-    public void refreshData(CanchaDto cancha){
-        this.nombre.set(cancha.getCanNombre());
-        this.direccion.set(cancha.getCanDireccion());
-        this.posterUrl.set(cancha.getCanUrl());
-        this.tel.set(cancha.getCanTel().toString());
-        this.cantJugadores.set(cancha.getCanCantJugadores().toString());
-        this.direccion.set(cancha.getCanDireccion());
-        this.latitud.set(cancha.getCanLatitud().toString());
-        this.longitud.set(cancha.getCanLongitud().toString());
-        this.abre.set(cancha.getCanAbre().toString());
-        this.cierra.set(cancha.getCanCierra().toString());
-        this.precioDia.set(cancha.getCanPrecioDia().toString());
-        this.precioNoches.set(cancha.getCanPrecioNoches().toString());
-        this.matches = cancha.getMatchList();
-        this.retos =  cancha.getRetoList();
-        this.admId = cancha.getAdmId();
-    }
-    
-    public boolean isOpen(Integer hour){
-        Long longH = Long.valueOf(hour);
-        if(getCanAbre()<getCanCierra()){
-            return getCanAbre()<=longH && getCanCierra()>longH;
-        } else if(getCanCierra()<getCanAbre()){
-            return !(getCanCierra()<=longH && getCanAbre()>longH);
-        } else {
-            return false;
+    public void convertirListaPartidos(List<Match> list){
+        this.matchList = new ArrayList<>();
+        for(Match match : list){
+            MatchDto newM = new MatchDto(match);
+            newM.setCanId(this);
+            newM.copiarSoloIDEquipos(match);
+            matchList.add(newM);
         }
     }
     
-    public boolean hayCampo(LocalDate date, Integer hour){
-        if(isOpen(hour))
-            return !(getMatchArrayList().stream().anyMatch(match -> DateUtil.Date2LocalDate(match.getMatDate()).equals(date) && match.getMatHora().equals(hour.longValue())));
-        else 
-            return false;
+    public void convertirListaRetos(List<Reto> list){
+        this.retoList = new ArrayList<>();
+        for(Reto reto : list){
+            RetoDto newR = new RetoDto(reto);
+            newR.setCanchaId(this);
+            newR.copiarSoloIDEquipos(reto);
+            retoList.add(newR);
+        }
     }
     
-    public void addMatch(Match match){
-      //  this.matches.add(match);
-      this.matches.add(match);
-    }
-    /**
-     * retorna la cantidad de partidos que se jugaron entre dos fechas
-     * @param startDate
-     * @param endDate
-     * @return 
-     
-
-    public Long getCanID() {
-        if(ID.get()!=null)
-            return Long.valueOf(ID.get());
-        else
-            return null;
+    //Getters and Setters
+    public Long getCanId() {
+        return canId;
     }
 
-    public void setCanID(Long ID) {
-        if(ID!=null)
-            this.ID.set(ID.toString()); 
+    public void setCanId(Long canId) {
+        this.canId = canId;
     }
 
     public String getCanNombre() {
-        return nombre.getValue();
+        return canNombre;
     }
 
-    public void setCanNombre(String nombre) {
-        this.nombre.set(nombre);
-    }
-
-    public Long getCanTel() {
-        return Long.valueOf(tel.getValue());
-    }
-
-    public void setCanTel(Long tel) {
-        this.tel.set(tel.toString());
-    }
-
-    public Long getCanCantJugadores() {
-        return Long.valueOf(cantJugadores.getValue());
-    }
-
-    public List<Reto> getRetoList() {
-        return retos;
-    }
-
-    public void setRetoList(List<Reto> retos) {
-        this.retos = retos;
-    }
-
-    public void setCanCantJugadores(Long cantJugadores) {
-        this.cantJugadores.set(cantJugadores.toString());
+    public void setCanNombre(String canNombre) {
+        this.canNombre = canNombre;
     }
 
     public String getCanDireccion() {
-        return direccion.getValue();
+        return canDireccion;
     }
 
-    public void setCanDireccion(String direccion) {
-        this.direccion.set(direccion);
+    public void setCanDireccion(String canDireccion) {
+        this.canDireccion = canDireccion;
     }
 
-    public Double getCanLatitud() {
-        return Double.valueOf(latitud.getValue());
+    public Integer getCanCantJugadores() {
+        return canCantJugadores;
     }
 
-    public void setCanLatitud(Double latitud) {
-        this.latitud.set(String.valueOf(latitud));
+    public void setCanCantJugadores(Integer canCantJugadores) {
+        this.canCantJugadores = canCantJugadores;
     }
 
-    public Double getCanLongitud() {
-        return Double.valueOf(longitud.getValue());
+    public Integer getCanLatitud() {
+        return canLatitud;
     }
 
-    public void setCanLongitud(Double longitud) {
-        this.longitud.set(longitud.toString());
+    public void setCanLatitud(Integer canLatitud) {
+        this.canLatitud = canLatitud;
     }
 
-    public Long getCanAbre() {
-        return Long.valueOf(abre.getValue());
+    public Integer getCanLongitud() {
+        return canLongitud;
     }
 
-    public void setCanAbre(Long abre) {
-        this.abre.set(abre.toString());
+    public void setCanLongitud(Integer canLongitud) {
+        this.canLongitud = canLongitud;
     }
 
-    public Long getCanCierra() {
-        return Long.valueOf(cierra.getValue());
+    public Integer getCanPrecioDia() {
+        return canPrecioDia;
     }
 
-    public void setCanCierra(Long cierra) {
-        this.cierra.set(cierra.toString());
+    public void setCanPrecioDia(Integer canPrecioDia) {
+        this.canPrecioDia = canPrecioDia;
     }
 
-    public Long getCanPrecioDia() {
-        return Long.valueOf(precioDia.getValue());
+    public Integer getCanPrecioNoches() {
+        return canPrecioNoches;
     }
 
-    public void setCanPrecioDia(Long precioDia) {
-        this.precioDia.set(precioDia.toString());
+    public void setCanPrecioNoches(Integer canPrecioNoches) {
+        this.canPrecioNoches = canPrecioNoches;
     }
 
-    public Long getCanPrecioNoches() {
-        return Long.valueOf(precioNoches.getValue());
+    public Integer getCanTel() {
+        return canTel;
     }
 
-    public void setCanPrecioNoches(Long precioNoches) {
-        this.precioNoches.set(precioNoches.toString());
+    public void setCanTel(Integer canTel) {
+        this.canTel = canTel;
     }
 
-    public Administrador getAdmId() {
-        return admId;
+    public Integer getCanCierra() {
+        return canCierra;
     }
 
-    public void setAdmId(Administrador admId) {
-        this.admId = admId;
+    public void setCanCierra(Integer canCierra) {
+        this.canCierra = canCierra;
     }
 
-    public List<Match> getMatchList() {
-        return matches;
+    public Integer getCanAbre() {
+        return canAbre;
     }
 
-    public void setMatchList(List<Match> matches) {
-        this.matches = matches;
-    }
-     
-    public ArrayList<Match> getMatchArrayList(){
-        return new ArrayList<>(this.matches);
-    }
-    
-    public ArrayList<Reto> getRetoArrayList(){
-        return new ArrayList<>(this.retos);
+    public void setCanAbre(Integer canAbre) {
+        this.canAbre = canAbre;
     }
 
     public String getCanUrl() {
-        return posterUrl.get();
+        return canUrl;
     }
 
-    public void setCanUrl(String posterUrl) {
-        this.posterUrl.set(posterUrl);
+    public void setCanUrl(String canUrl) {
+        this.canUrl = canUrl;
     }
 
-    public List<Match> getMatches() {
-        return matches;
+    public AdministradorDto getAdmId() {
+        return admId;
     }
 
-    public void setMatches(List<Match> matches) {
-        this.matches = matches;
+    public void setAdmId(AdministradorDto admId) {
+        this.admId = admId;
     }
 
-    public List<Reto> getRetos() {
-        return retos;
+    public List<RetoDto> getRetoList() {
+        return retoList;
     }
 
-    public void setRetos(List<Reto> retos) {
-        this.retos = retos;
+    public void setRetoList(List<RetoDto> retoList) {
+        this.retoList = retoList;
+    }
+
+    public List<MatchDto> getMatchList() {
+        return matchList;
+    }
+
+    public void setMatchList(List<MatchDto> matchList) {
+        this.matchList = matchList;
     }
     
-    public String getNombre() {
-        return nombre.getValue();
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre.set(nombre);
-    }
-    */
 }
