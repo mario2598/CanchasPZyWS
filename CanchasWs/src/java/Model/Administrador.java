@@ -6,9 +6,10 @@
 package Model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,8 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -40,40 +39,63 @@ public class Administrador implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @NotNull
+   // @NotNull
     @Column(name = "ADM_ID")
-    private BigDecimal admId;
+    private Long admId;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
+ //   @NotNull
+  //  @Size(min = 1, max = 30)
     @Column(name = "ADM_USU")
     private String admUsu;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
+ //   @NotNull
+  //  @Size(min = 1, max = 30)
     @Column(name = "ADM_PASSWORD")
     private String admPassword;
-    @OneToMany(mappedBy = "admId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "admId", fetch = FetchType.LAZY)
     private List<Cancha> canchaList;
 
     public Administrador() {
     }
 
-    public Administrador(BigDecimal admId) {
+    public Administrador(Long admId) {
         this.admId = admId;
     }
 
-    public Administrador(BigDecimal admId, String admUsu, String admPassword) {
+    public Administrador(Long admId, String admUsu, String admPassword) {
         this.admId = admId;
         this.admUsu = admUsu;
         this.admPassword = admPassword;
     }
+    
+    public Administrador(AdministradorDto adminDto){
+        if(adminDto.adminId != null){
+            this.admId = adminDto.adminId;
+        }
+        copiarInfo(adminDto);
+    }
+    
+    public void copiarInfo(AdministradorDto adminDto){
+        this.admUsu = adminDto.adminUsu;
+        this.admPassword = adminDto.adminPassword;
+    }
+    
+    public void convertirListaCanchas(List<CanchaDto> list){
+        this.canchaList = new ArrayList<>();
+        for(CanchaDto cancha : list){
+            Cancha newC = new Cancha(cancha);
+            newC.setAdmId(this);
+            newC.convertirListaPartidos(cancha.matchList);
+            newC.convertirListaRetos(cancha.retoList);
+            canchaList.add(newC);
+        }
+    }
 
-    public BigDecimal getAdmId() {
+    public Long getAdmId() {
         return admId;
     }
 
-    public void setAdmId(BigDecimal admId) {
+    public void setAdmId(Long admId) {
         this.admId = admId;
     }
 
@@ -97,7 +119,6 @@ public class Administrador implements Serializable {
     public List<Cancha> getCanchaList() {
         return canchaList;
     }
-
     public void setCanchaList(List<Cancha> canchaList) {
         this.canchaList = canchaList;
     }
@@ -116,7 +137,7 @@ public class Administrador implements Serializable {
             return false;
         }
         Administrador other = (Administrador) object;
-        if ((this.admId == null && other.admId != null) || (this.admId != null && !this.admId.equals(other.admId))) {
+        if((this.admId == null && other.admId != null) || (this.admId != null && !this.admId.equals(other.admId))) {
             return false;
         }
         return true;

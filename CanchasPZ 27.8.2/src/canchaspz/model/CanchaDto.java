@@ -20,7 +20,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class CanchaDto {
     //Attributes
     public SimpleStringProperty ID;
-    private Administrador admId;
+//    private Administrador admId;
     public SimpleStringProperty posterUrl;
     public SimpleStringProperty nombre;
     public SimpleStringProperty tel;
@@ -38,7 +38,7 @@ public class CanchaDto {
     //Constructors
     public CanchaDto(){
         this.ID = new SimpleStringProperty();
-        this.admId = null;
+//        this.admId = null;
         this.posterUrl = new SimpleStringProperty();
         this.nombre = new SimpleStringProperty();
         this.direccion = new SimpleStringProperty();
@@ -91,7 +91,7 @@ public class CanchaDto {
         this.precioNoches.set(cancha.getCanPrecioNoches().toString());
         this.matches = cancha.getMatchList();
         this.retos =  cancha.getRetoList();
-        this.admId = cancha.getAdmId();
+//        this.admId = cancha.getAdmId();
     }
     
     public void refreshData(CanchaDto cancha){
@@ -109,7 +109,7 @@ public class CanchaDto {
         this.precioNoches.set(cancha.getCanPrecioNoches().toString());
         this.matches = cancha.getMatchList();
         this.retos =  cancha.getRetoList();
-        this.admId = cancha.getAdmId();
+//        this.admId = cancha.getAdmId();
     }
     
     public boolean isOpen(Integer hour){
@@ -330,14 +330,14 @@ public class CanchaDto {
         this.precioNoches.set(precioNoches.toString());
     }
 
-    public Administrador getAdmId() {
+    /*public Administrador getAdmId() {
         return admId;
     }
 
     public void setAdmId(Administrador admId) {
         this.admId = admId;
     }
-
+*/
     public List<Match> getMatchList() {
         return matches;
     }

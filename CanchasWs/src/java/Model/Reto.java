@@ -42,7 +42,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Reto.findByRetoHoraFin", query = "SELECT r FROM Reto r WHERE r.retoHoraFin = :retoHoraFin")
     , @NamedQuery(name = "Reto.findByRetoFecha", query = "SELECT r FROM Reto r WHERE r.retoFecha = :retoFecha")
     , @NamedQuery(name = "Reto.findByRetoCompleto", query = "SELECT r FROM Reto r WHERE r.retoCompleto = :retoCompleto")
-    , @NamedQuery(name = "Reto.findByRetoNivel", query = "SELECT r FROM Reto r WHERE r.retoNivel = :retoNivel")})
+    , @NamedQuery(name = "Reto.findByRetoNivel", query = "SELECT r FROM Reto r WHERE r.retoNivel = :retoNivel")
+    , @NamedQuery(name = "Reto.findByCanId", query = "SELECT r FROM Reto r WHERE r.canchaId = :canId")})
 public class Reto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,11 +52,11 @@ public class Reto implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "RETO_ID")
-    private BigDecimal retoId;
+    private Long retoId;
     @Column(name = "RETO_HORA_INI")
-    private BigInteger retoHoraIni;
+    private Integer retoHoraIni;
     @Column(name = "RETO_HORA_FIN")
-    private BigInteger retoHoraFin;
+    private Integer retoHoraFin;
     @Column(name = "RETO_FECHA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date retoFecha;
@@ -63,7 +64,7 @@ public class Reto implements Serializable {
     @Column(name = "RETO_COMPLETO")
     private String retoCompleto;
     @Column(name = "RETO_NIVEL")
-    private BigInteger retoNivel;
+    private Integer retoNivel;
     @OneToMany(mappedBy = "retoId", fetch = FetchType.LAZY)
     private List<Equipo> equipoList;
     @JoinColumn(name = "CANCHA_ID", referencedColumnName = "CAN_ID")
@@ -79,31 +80,58 @@ public class Reto implements Serializable {
     public Reto() {
     }
 
-    public Reto(BigDecimal retoId) {
+    public Reto(Long retoId) {
         this.retoId = retoId;
     }
+    
+    public Reto(RetoDto retoDto){
+        if(retoDto.retoId!=null){
+            this.retoId = retoDto.retoId;
+        }
+        copiarInfo(retoDto);
+    }
+    
+    public void copiarInfo(RetoDto retoDto){
+        this.retoHoraIni = retoDto.retoHoraIni;
+        this.retoHoraFin = retoDto.retoHoraFin;
+        this.retoFecha = retoDto.retoFecha;
+        this.retoCompleto = retoDto.retoCompleto;
+        this.retoNivel = retoDto.retoNivel;
+    }
+    
+    public void copiarSoloIDEquipos(RetoDto match){
+        this.equipo1Id = new Equipo();
+        this.equipo1Id.setEquId(match.equipo1Id.equId);
+        this.equipo2Id = new Equipo();
+        this.equipo2Id.setEquId(match.equipo2Id.equId);
+    }
+    
+    public void copiarSoloIdCancha(RetoDto reto){
+        this.canchaId = new Cancha();
+        this.canchaId.setCanId(reto.canchaId.canId);
+    }
 
-    public BigDecimal getRetoId() {
+    public Long getRetoId() {
         return retoId;
     }
 
-    public void setRetoId(BigDecimal retoId) {
+    public void setRetoId(Long retoId) {
         this.retoId = retoId;
     }
 
-    public BigInteger getRetoHoraIni() {
+    public Integer getRetoHoraIni() {
         return retoHoraIni;
     }
 
-    public void setRetoHoraIni(BigInteger retoHoraIni) {
+    public void setRetoHoraIni(Integer retoHoraIni) {
         this.retoHoraIni = retoHoraIni;
     }
 
-    public BigInteger getRetoHoraFin() {
+    public Integer getRetoHoraFin() {
         return retoHoraFin;
     }
 
-    public void setRetoHoraFin(BigInteger retoHoraFin) {
+    public void setRetoHoraFin(Integer retoHoraFin) {
         this.retoHoraFin = retoHoraFin;
     }
 
@@ -123,11 +151,11 @@ public class Reto implements Serializable {
         this.retoCompleto = retoCompleto;
     }
 
-    public BigInteger getRetoNivel() {
+    public Integer getRetoNivel() {
         return retoNivel;
     }
 
-    public void setRetoNivel(BigInteger retoNivel) {
+    public void setRetoNivel(Integer retoNivel) {
         this.retoNivel = retoNivel;
     }
 

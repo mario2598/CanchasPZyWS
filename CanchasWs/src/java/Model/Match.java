@@ -6,8 +6,6 @@
 package Model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -42,7 +40,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Match.findByMatMarcador2", query = "SELECT m FROM Match m WHERE m.matMarcador2 = :matMarcador2")
     , @NamedQuery(name = "Match.findByMatResultado", query = "SELECT m FROM Match m WHERE m.matResultado = :matResultado")
     , @NamedQuery(name = "Match.findByMatCobro", query = "SELECT m FROM Match m WHERE m.matCobro = :matCobro")
-    , @NamedQuery(name = "Match.findByEquWin", query = "SELECT m FROM Match m WHERE m.equWin = :equWin")})
+    , @NamedQuery(name = "Match.findByEquWin", query = "SELECT m FROM Match m WHERE m.equWin = :equWin")
+    , @NamedQuery(name = "Match.findByCanId", query = "SELECT m FROM Match m WHERE m.canId = :canId")})
 public class Match implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,25 +50,25 @@ public class Match implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "MAT_ID")
-    private BigDecimal matId;
+    private Long matId;
     @Column(name = "MAT_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date matDate;
     @Column(name = "MAT_HORA")
-    private BigInteger matHora;
+    private Integer matHora;
     @Size(max = 1)
     @Column(name = "MAT_DISPUTADO")
     private String matDisputado;
     @Column(name = "MAT_MARCADOR1")
-    private BigInteger matMarcador1;
+    private Integer matMarcador1;
     @Column(name = "MAT_MARCADOR2")
-    private BigInteger matMarcador2;
+    private Integer matMarcador2;
     @Column(name = "MAT_RESULTADO")
-    private BigInteger matResultado;
+    private Integer matResultado;
     @Column(name = "MAT_COBRO")
-    private BigInteger matCobro;
+    private Integer matCobro;
     @Column(name = "EQU_WIN")
-    private BigInteger equWin;
+    private Integer equWin;
     @JoinColumn(name = "CAN_ID", referencedColumnName = "CAN_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Cancha canId;
@@ -81,17 +80,48 @@ public class Match implements Serializable {
     private Equipo equId1;
 
     public Match() {
+        
     }
 
-    public Match(BigDecimal matId) {
+    public Match(Long matId) {
         this.matId = matId;
     }
+    
+    public Match(MatchDto matchDto){
+        if(matchDto.matId!=null){
+            this.matId = matchDto.matId;
+        }
+        copiarInfo(matchDto);
+    }
+    
+    public void copiarInfo(MatchDto matchDto){
+        this.matDate = matchDto.matDate;
+        this.matHora = matchDto.matHora;
+        this.matDisputado = matchDto.matDisputado;
+        this.matMarcador1 = matchDto.matMarcador1;
+        this.matMarcador2 = matchDto.matMarcador2;
+        this.matResultado = matchDto.matResultado;
+        this.matCobro = matchDto.matCobro;
+        this.equWin = matchDto.equWin;
+    }
+    
+    public void copiarSoloIDEquipos(MatchDto match){
+        this.equId1 = new Equipo();
+        this.equId1.setEquId(match.equId1.equId);
+        this.equId2 = new Equipo();
+        this.equId2.setEquId(match.equId2.equId);
+    }
+    
+    public void copiarSoloIdCancha(MatchDto match){
+        this.canId = new Cancha();
+        this.canId.setCanId(match.canId.canId);
+    }
 
-    public BigDecimal getMatId() {
+    public Long getMatId() {
         return matId;
     }
 
-    public void setMatId(BigDecimal matId) {
+    public void setMatId(Long matId) {
         this.matId = matId;
     }
 
@@ -103,11 +133,11 @@ public class Match implements Serializable {
         this.matDate = matDate;
     }
 
-    public BigInteger getMatHora() {
+    public Integer getMatHora() {
         return matHora;
     }
 
-    public void setMatHora(BigInteger matHora) {
+    public void setMatHora(Integer matHora) {
         this.matHora = matHora;
     }
 
@@ -119,43 +149,43 @@ public class Match implements Serializable {
         this.matDisputado = matDisputado;
     }
 
-    public BigInteger getMatMarcador1() {
+    public Integer getMatMarcador1() {
         return matMarcador1;
     }
 
-    public void setMatMarcador1(BigInteger matMarcador1) {
+    public void setMatMarcador1(Integer matMarcador1) {
         this.matMarcador1 = matMarcador1;
     }
 
-    public BigInteger getMatMarcador2() {
+    public Integer getMatMarcador2() {
         return matMarcador2;
     }
 
-    public void setMatMarcador2(BigInteger matMarcador2) {
+    public void setMatMarcador2(Integer matMarcador2) {
         this.matMarcador2 = matMarcador2;
     }
 
-    public BigInteger getMatResultado() {
+    public Integer getMatResultado() {
         return matResultado;
     }
 
-    public void setMatResultado(BigInteger matResultado) {
+    public void setMatResultado(Integer matResultado) {
         this.matResultado = matResultado;
     }
 
-    public BigInteger getMatCobro() {
+    public Integer getMatCobro() {
         return matCobro;
     }
 
-    public void setMatCobro(BigInteger matCobro) {
+    public void setMatCobro(Integer matCobro) {
         this.matCobro = matCobro;
     }
 
-    public BigInteger getEquWin() {
+    public Integer getEquWin() {
         return equWin;
     }
 
-    public void setEquWin(BigInteger equWin) {
+    public void setEquWin(Integer equWin) {
         this.equWin = equWin;
     }
 
