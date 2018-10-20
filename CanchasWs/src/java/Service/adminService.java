@@ -41,26 +41,18 @@ public class adminService {
            return admin; 
         }  
     
-<<<<<<< HEAD
     public List getAdminList(Long id){
         Administrador admin; 
         List<Cancha> canchaList;
         Query qryusu = em.createNamedQuery("Administrador.findByAdmId",Administrador.class);
         qryusu.setParameter("admId",id);
-   
-         try {
-               admin = (Administrador) qryusu.getSingleResult();
-               canchaList = admin.getCanchaList();
-           
+        try {
+            admin = (Administrador) qryusu.getSingleResult();
+            canchaList = admin.getCanchaList();
         } catch (NoResultException ex) {
-               canchaList = null;
+            canchaList = null;
         }
-           return canchaList; 
-        }  
-=======
-    public void imp(){
-        System.out.println("dfdc");
->>>>>>> master
+        return canchaList; 
     }
     
  }
