@@ -11,6 +11,8 @@ import canchaspz.util.AppContext;
 import canchaspz.util.DateUtil;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXDialogLayout;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,7 +24,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -30,9 +31,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.xssf.usermodel.XSSFTable;
-import org.openxmlformats.schemas.drawingml.x2006.main.CTTable;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableStyleInfo;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * FXML Controller class
@@ -53,7 +52,8 @@ public class ProfitReportController extends DialogController implements Initiali
     private JFXDatePicker dpStartDate;
     @FXML
     private JFXDatePicker dpEndDate;
-    
+    private String[] data;
+    private String url;
     private CanchaDto field;
     private AdministradorDto admin;
     /**
@@ -68,15 +68,15 @@ public class ProfitReportController extends DialogController implements Initiali
                 bindField();
                 else
                    bindAdmin(); 
-            }
-                
+            }      
         });
+        
         this.dpEndDate.setOnAction(event->{
             if(this.dpStartDate.getValue()!=null){
                 if(this.field!=null)
                 bindField();
                 else
-                   bindAdmin(); 
+                    bindAdmin(); 
             }
         });
     }    
@@ -92,21 +92,19 @@ public class ProfitReportController extends DialogController implements Initiali
 
     @FXML
     private void exportToExcel(ActionEvent event) throws FileNotFoundException, IOException {
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet();
+        HSSFWorkbook workbook = new HSSFWorkbook();//Documento excel (2007 o posterior)
+        HSSFSheet sheet = workbook.createSheet();//hoja excel
+        
+        //nombre documento
         if(AppContext.getInstance().getCanchaActual()!=null)
         workbook.setSheetName(0, "Reporte Ganancias "+ AppContext.getInstance().getCanchaActual().getNombre());
         else
             workbook.setSheetName(0, "Reporte Ganancias "+ AppContext.getInstance().getAdmin().getAdmUsu());
         
-        String[] data = new String[]{
-            this.dpStartDate.getValue().toString(),
-            this.dpEndDate.getValue().toString(),
-            this.lblOccupedSpaces.getText(),
-            this.lblEmptySpaces.getText(),
-            this.lblProfits.getText()
-        };
+        //arreglo de datos que van a ser introducidos
+        loadData();
         
+        //cabeceras de columnas
         String[] headers = new String[]{
             "fecha inicio",
             "fecha final",
@@ -115,36 +113,45 @@ public class ProfitReportController extends DialogController implements Initiali
             "monto recaudado"
         };
         
+        //estilo cabecera
         CellStyle headerStyle = workbook.createCellStyle();
+        //fuente
         HSSFFont font = workbook.createFont();
         font.setBold(true);
+        font.setItalic(true);
+        //relleno
         headerStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
         headerStyle.setFont(font);
-
+        
+        //estilo otras celdas (falta aplicar)
         CellStyle style = workbook.createCellStyle();
         style.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
         
+        //estilo otras celdas (falta aplicar)
+        CellStyle styleTotal = workbook.createCellStyle();
+        style.setFillForegroundColor(IndexedColors.DARK_GREEN.getIndex());
+        
         //crea la fila de cabecera
-        HSSFRow headerRow = sheet.createRow(0);
+        HSSFRow headerRow = sheet.createRow(0);//
         for (int i = 0; i < headers.length; ++i) {
-            HSSFCell cell = headerRow.createCell(i);
+            HSSFCell cell = headerRow.createCell(i);//defines an Excel cell addressed in reference to a row.
             cell.setCellStyle(headerStyle);
             cell.setCellValue(headers[i]);
         }
         
         //crea la segunda fila con datos
-        HSSFRow dataRow = sheet.createRow(1);
-        for(int i=0;i<data.length;i++){
-            dataRow.createCell(i).setCellValue(data[i]);
-        }
+        Integer rows=1;
         
+        //crea última fila
+        createLastRow(sheet,style);
+        
+        //se ajusten al tamaño
         for(int i=0;i<headers.length;i++){
            sheet.autoSizeColumn(i);
         }
         
-        try (FileOutputStream file = new FileOutputStream("src/canchaspz/resources/reports/report"+AppContext.getInstance().getCanchaActual().getNombre()+".xls")) {
-            workbook.write(file);
-        }
+        saveFile(workbook);
+        openFile();
     }
     
     private void bindField(){
@@ -165,5 +172,48 @@ public class ProfitReportController extends DialogController implements Initiali
         this.lblEmptySpaces.textProperty().unbind();
         this.lblOccupedSpaces.textProperty().unbind();
         this.lblProfits.textProperty().unbind();
+    }
+    
+    private void loadData(){
+        data = new String[]{
+            this.dpStartDate.getValue().toString(),
+            this.dpEndDate.getValue().toString(),
+            this.lblOccupedSpaces.getText(),
+            this.lblEmptySpaces.getText(),
+            this.lblProfits.getText()
+        };
+    }
+    
+    public void createLastRow(HSSFSheet sheet,CellStyle style){
+        Integer lastRow = sheet.getLastRowNum();
+        HSSFRow dataRow = sheet.createRow(lastRow+1);
+        for(int i=0;i<data.length;i++){
+            dataRow.setRowStyle(style);
+            dataRow.createCell(i).setCellValue(data[i]);
+        }
+    }
+    
+    public void saveFile(HSSFWorkbook workbook){
+        url="src/canchaspz/resources/reports/report"+AppContext.getInstance().getCanchaActual().getNombre()+".xls";
+        try (FileOutputStream file = new FileOutputStream(url)) {
+            workbook.write(file);
+        }
+        catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+    }
+    
+    public void openFile() throws FileNotFoundException, IOException{
+        url="src/canchaspz/resources/reports/report"+AppContext.getInstance().getCanchaActual().getNombre()+".xls";
+        File xlsx = new File(url);
+		FileInputStream is = new FileInputStream(xlsx);
+
+		XSSFWorkbook workbook = new XSSFWorkbook(is);
+		if (xlsx.isFile() && xlsx.exists()) {
+			System.out.println("existía");
+                     
+		} else {
+			System.out.println("no existía");
+		}
     }
 }

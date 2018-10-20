@@ -161,11 +161,6 @@ public class CanchaDto {
         info.put("earnedMoney", new SimpleStringProperty(getEarnedMoney(startDate,endDate).toString()));
         info.put("emptySpaces", new SimpleStringProperty(getEmptySpaces(startDate,endDate,spacesAtDay).toString()));    
         
-        System.out.println("espacios disponibles por día :"+spacesAtDay);
-        System.out.println("espacios entre esas fechas :"+getTotalSpacesIntoDates(startDate,endDate,spacesAtDay).toString());  
-        System.out.println("partidos jugados entre esas fechas :"+getOccupedSpaces(startDate,endDate).toString());
-        System.out.println("espacios vacíos :"+getEmptySpaces(startDate,endDate,spacesAtDay));
-        
         return info;
     }
     
@@ -384,6 +379,13 @@ public class CanchaDto {
 
     public void setNombre(String nombre) {
         this.nombre.set(nombre);
+    }
+    
+    //hacer stream con filtros (parecido al de partidos entre fechas)
+    public ArrayList<Match> getMatchesIntoDates(){
+        ArrayList<Match> arrayListMatches=new ArrayList<>();
+        arrayListMatches.addAll(this.getMatches());
+        return arrayListMatches;
     }
     
 }
