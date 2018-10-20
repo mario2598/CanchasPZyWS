@@ -88,33 +88,33 @@ public class Match implements Serializable {
     }
     
     public Match(MatchDto matchDto){
-        if(matchDto.getMatId()!=null){
-            this.matId = matchDto.getMatId();
+        if(matchDto.matId!=null){
+            this.matId = matchDto.matId;
         }
         copiarInfo(matchDto);
     }
     
     public void copiarInfo(MatchDto matchDto){
-        this.matDate = matchDto.getMatDate();
-        this.matHora = matchDto.getMatHora();
-        this.matDisputado = matchDto.getMatDisputado();
-        this.matMarcador1 = matchDto.getMatMarcador1();
-        this.matMarcador2 = matchDto.getMatMarcador2();
-        this.matResultado = matchDto.getMatResultado();
-        this.matCobro = matchDto.getMatCobro();
-        this.equWin = matchDto.getEquWin();
+        this.matDate = matchDto.matDate;
+        this.matHora = matchDto.matHora;
+        this.matDisputado = matchDto.matDisputado;
+        this.matMarcador1 = matchDto.matMarcador1;
+        this.matMarcador2 = matchDto.matMarcador2;
+        this.matResultado = matchDto.matResultado;
+        this.matCobro = matchDto.matCobro;
+        this.equWin = matchDto.equWin;
     }
     
     public void copiarSoloIDEquipos(MatchDto match){
         this.equId1 = new Equipo();
-        this.equId1.setEquId(match.getEquId1().getEquId());
+        this.equId1.setEquId(match.equId1.equId);
         this.equId2 = new Equipo();
-        this.equId2.setEquId(match.getEquId2().getEquId());
+        this.equId2.setEquId(match.equId2.equId);
     }
     
     public void copiarSoloIdCancha(MatchDto match){
         this.canId = new Cancha();
-        this.canId.setCanId(match.getCanId().getCanId());
+        this.canId.setCanId(match.canId.canId);
     }
 
     public Long getMatId() {

@@ -69,15 +69,15 @@ public class Administrador implements Serializable {
     }
     
     public Administrador(AdministradorDto adminDto){
-        if(adminDto.getAdminId()!=null){
-            this.admId = adminDto.getAdminId();
+        if(adminDto.adminId != null){
+            this.admId = adminDto.adminId;
         }
         copiarInfo(adminDto);
     }
     
     public void copiarInfo(AdministradorDto adminDto){
-        this.admUsu = adminDto.getAdminUsu();
-        this.admPassword = adminDto.getAdminPassword();
+        this.admUsu = adminDto.adminUsu;
+        this.admPassword = adminDto.adminPassword;
     }
     
     public void convertirListaCanchas(List<CanchaDto> list){

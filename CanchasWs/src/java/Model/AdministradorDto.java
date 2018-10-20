@@ -19,10 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 public class AdministradorDto {
     //Attributes
-    private Long adminId;
-    private String adminUsu;
-    private String adminPassword;
-    private List<CanchaDto> canchaList;
+    public Long adminId;
+    public String adminUsu;
+    public String adminPassword;
+    public List<CanchaDto> canchaList;
      
     //Constructors
     public AdministradorDto(){
@@ -46,44 +46,11 @@ public class AdministradorDto {
         this.canchaList = new ArrayList<>();
         for(Cancha cancha : list){
             CanchaDto newC = new CanchaDto(cancha);
-            newC.setAdmId(this);
+            newC.admId = null;
             newC.convertirListaPartidos(cancha.getMatchList());
             newC.convertirListaRetos(cancha.getRetoList());
             canchaList.add(newC);
         }
     }
-    
-    //Setters and Getters
-    public Long getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(Long adminId) {
-        this.adminId = adminId;
-    }
-
-    public String getAdminUsu() {
-        return adminUsu;
-    }
-
-    public void setAdminUsu(String adminUsu) {
-        this.adminUsu = adminUsu;
-    }
-
-    public String getAdminPassword() {
-        return adminPassword;
-    }
-
-    public void setAdminPassword(String adminPassword) {
-        this.adminPassword = adminPassword;
-    }
-
-//    public List<CanchaDto> getCanchaList() {
-//        return canchaList;
-//    }
-//
-//    public void setCanchaList(List<CanchaDto> canchaList) {
-//        this.canchaList = canchaList;
-//    }
     
 }

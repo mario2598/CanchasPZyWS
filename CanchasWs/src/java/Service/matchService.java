@@ -52,8 +52,7 @@ public class matchService {
      * @param match
      * @return 
      */
-    public boolean guardarMatch(Match match){
-        boolean guardado;
+    public Match guardarMatch(Match match){
         Match matchAux;
         et = em.getTransaction();
         et.begin();
@@ -68,7 +67,8 @@ public class matchService {
                 }
                 if(matchAux != null){
                     //Ya existe una cancha con el mismo id en la base de datos
-                    em.merge(match);
+                    matchAux = match;
+                    em.merge(matchAux);
                 } else {
                     matchAux = match;
                     em.persist(matchAux);
@@ -78,12 +78,11 @@ public class matchService {
                 em.persist(matchAux);
             }
             et.commit();
-            guardado = true;
         } catch(Exception ex){
             et.rollback();
-            guardado = false;
+            matchAux = null;
         }
-        return guardado;
+        return matchAux;
     }
     
     /**

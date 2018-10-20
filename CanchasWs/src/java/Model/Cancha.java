@@ -97,24 +97,24 @@ public class Cancha implements Serializable {
     }
     
     public Cancha(CanchaDto canchaDto){
-        if(canchaDto.getCanId()!=null){
-            this.canId = canchaDto.getCanId();
+        if(canchaDto.canId!=null){
+            this.canId = canchaDto.canId;
         }
         copiarInfo(canchaDto);
     }
     
     public void copiarInfo(CanchaDto canchaDto){
-        this.canNombre = canchaDto.getCanNombre();
-        this.canDireccion = canchaDto.getCanDireccion();
-        this.canCantJugadores = canchaDto.getCanCantJugadores();
-        this.canLatitud = canchaDto.getCanLatitud();
-        this.canLongitud = canchaDto.getCanLongitud();
-        this.canPrecioDia = canchaDto.getCanPrecioDia();
-        this.canPrecioNoches = canchaDto.getCanPrecioNoches();
-        this.canTel = canchaDto.getCanTel();
-        this.canCierra = canchaDto.getCanCierra();
-        this.canAbre = canchaDto.getCanAbre();
-        this.canUrl = canchaDto.getCanUrl();
+        this.canNombre = canchaDto.canNombre;
+        this.canDireccion = canchaDto.canDireccion;
+        this.canCantJugadores = canchaDto.canCantJugadores;
+        this.canLatitud = canchaDto.canLatitud;
+        this.canLongitud = canchaDto.canLongitud;
+        this.canPrecioDia = canchaDto.canPrecioDia;
+        this.canPrecioNoches = canchaDto.canPrecioNoches;
+        this.canTel = canchaDto.canTel;
+        this.canCierra = canchaDto.canCierra;
+        this.canAbre = canchaDto.canAbre;
+        this.canUrl = canchaDto.canUrl;
     }
     
     public void convertirListaPartidos(List<MatchDto> list){

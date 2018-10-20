@@ -68,12 +68,11 @@ public class equipoService {
      * @param team Equipo a persistir
      * @return Resultado tras intentar la persistencia
      */
-    public boolean guardarEquipo(Equipo team){
-        boolean guardado;
+    public Equipo guardarEquipo(Equipo team){
+        Equipo equipoAux;
+        et = em.getTransaction();
+        et.begin();
         try{
-            et = em.getTransaction();
-            et.begin();
-            Equipo equipoAux;
             if(team.getEquId()!=null){
                 Query qryUsu = em.createNamedQuery("Equipo.findByEquId", Equipo.class);            
                 qryUsu.setParameter("equId", team.getEquId());   
@@ -88,18 +87,16 @@ public class equipoService {
             if(equipoAux != null){
                 equipoAux = team;
                 em.merge(equipoAux);
-                guardado = true;
             } else {
                 equipoAux = team;
                 em.persist(equipoAux);
-                guardado = true;
             }
             et.commit();
         }catch(Exception ex){
             et.rollback();
-            guardado = false;
+            equipoAux = null;
         }
-        return guardado;
+        return equipoAux;
     }
        
 }

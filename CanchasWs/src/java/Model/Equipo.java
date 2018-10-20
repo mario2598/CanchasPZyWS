@@ -105,22 +105,22 @@ public class Equipo implements Serializable {
     }
     
     public Equipo(EquipoDto equipoDto){
-        if(equipoDto.getEquId()!=null){
-            this.equId = equipoDto.getEquId();
+        if(equipoDto.equId!=null){
+            this.equId = equipoDto.equId;
         }
         copiarInfo(equipoDto);
     }
     
     public void copiarInfo(EquipoDto equipoDto){
-        this.equUsu = equipoDto.getEquUsu();
-        this.equPassword = equipoDto.getEquPassword();
-        this.equNombre = equipoDto.getEquNombre();
-        this.equNomJug1 = equipoDto.getEquNomJug1();
-        this.equNomJug2 = equipoDto.getEquNomJug2();
-        this.equUrl = equipoDto.getUrl();
-        this.equTelJug2 = equipoDto.getEquTelJug1();
-        this.equTelJug1 = equipoDto.getEquTelJug2();
-        this.equPts = equipoDto.getEquPts();
+        this.equUsu = equipoDto.equUsu;
+        this.equPassword = equipoDto.equPassword;
+        this.equNombre = equipoDto.equNombre;
+        this.equNomJug1 = equipoDto.equNomJug1;
+        this.equNomJug2 = equipoDto.equNomJug2;
+        this.equUrl = equipoDto.url;
+        this.equTelJug2 = equipoDto.equTelJug2;
+        this.equTelJug1 = equipoDto.equTelJug1;
+        this.equPts = equipoDto.equPts;
     }
     
     /**
@@ -134,12 +134,14 @@ public class Equipo implements Serializable {
         for(MatchDto match : list){
             Match newM = new Match(match);
             newM.copiarSoloIDEquipos(match);
+            newM.setEquId1(this);
             newM.copiarSoloIdCancha(match);
             matchList.add(newM);
         }
         for(MatchDto match : list1){
             Match newM = new Match(match);
             newM.copiarSoloIDEquipos(match);
+            newM.setEquId2(this);
             newM.copiarSoloIdCancha(match);
             matchList1.add(newM);
         }
@@ -150,7 +152,8 @@ public class Equipo implements Serializable {
         this.retoList1 = null; //Esta lista de retos siempre estara vacia, una vez aceptado el reto es eliminado de la base de datos
         for(RetoDto reto : list){
             Reto newR = new Reto(reto);
-            newR.copiarSoloIDEquipos(reto);
+            newR.setEquipo1Id(this);
+            newR.setEquipo2Id(null);
             newR.copiarSoloIdCancha(reto);
             retoList.add(newR);
         }

@@ -85,30 +85,30 @@ public class Reto implements Serializable {
     }
     
     public Reto(RetoDto retoDto){
-        if(retoDto.getRetoId()!=null){
-            this.retoId = retoDto.getRetoId();
+        if(retoDto.retoId!=null){
+            this.retoId = retoDto.retoId;
         }
         copiarInfo(retoDto);
     }
     
     public void copiarInfo(RetoDto retoDto){
-        this.retoHoraIni = retoDto.getRetoHoraIni();
-        this.retoHoraFin = retoDto.getRetoHoraFin();
-        this.retoFecha = retoDto.getRetoFecha();
-        this.retoCompleto = retoDto.getRetoCompleto();
-        this.retoNivel = retoDto.getRetoNivel();
+        this.retoHoraIni = retoDto.retoHoraIni;
+        this.retoHoraFin = retoDto.retoHoraFin;
+        this.retoFecha = retoDto.retoFecha;
+        this.retoCompleto = retoDto.retoCompleto;
+        this.retoNivel = retoDto.retoNivel;
     }
     
     public void copiarSoloIDEquipos(RetoDto match){
         this.equipo1Id = new Equipo();
-        this.equipo1Id.setEquId(match.getEquipo1Id().getEquId());
+        this.equipo1Id.setEquId(match.equipo1Id.equId);
         this.equipo2Id = new Equipo();
-        this.equipo2Id.setEquId(match.getEquipo2Id().getEquId());
+        this.equipo2Id.setEquId(match.equipo2Id.equId);
     }
     
     public void copiarSoloIdCancha(RetoDto reto){
         this.canchaId = new Cancha();
-        this.canchaId.setCanId(reto.getCanchaId().getCanId());
+        this.canchaId.setCanId(reto.canchaId.canId);
     }
 
     public Long getRetoId() {

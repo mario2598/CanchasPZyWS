@@ -44,8 +44,7 @@ public class canchaService {
      * @param cancha
      * @return 
      */
-    public boolean guardarCancha(Cancha cancha){
-        boolean guardada;
+    public Cancha guardarCancha(Cancha cancha){
         Cancha canchaAux;
         et = em.getTransaction();
         et.begin();
@@ -60,24 +59,22 @@ public class canchaService {
                 }
                 if(canchaAux != null){
                     //Ya existe una cancha con el mismo id en la base de datos
-                    em.merge(cancha);
-                    guardada = true;
+                    canchaAux = cancha;
+                    em.merge(canchaAux);
                 } else {
                     canchaAux = cancha;
                     em.persist(canchaAux);
-                    guardada = true;
                 }
             } else {
                 canchaAux = cancha;
                 em.persist(canchaAux);
-                guardada = true;
             }
             et.commit();
         } catch(Exception ex){
             et.rollback();
-            guardada = false;
+            canchaAux = null;
         }
-        return guardada;
+        return canchaAux;
     }
     
     public List<Cancha> getListaCanchas(){

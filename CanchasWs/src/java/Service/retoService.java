@@ -7,7 +7,6 @@ package Service;
 
 import Model.Cancha;
 import Model.Equipo;
-import Model.Match;
 import Model.Reto;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,8 +52,7 @@ public class retoService {
      * @param reto
      * @return 
      */
-    public boolean guardarReto(Reto reto){
-        boolean guardado;
+    public Reto guardarReto(Reto reto){
         Reto retoAux;
         et = em.getTransaction();
         et.begin();
@@ -69,7 +67,8 @@ public class retoService {
                 }
                 if(retoAux != null){
                     //Ya existe un reto con el mismo id en la base de datos
-                    em.merge(reto);
+                    retoAux = reto;
+                    em.merge(retoAux);
                 } else {
                     retoAux = reto;
                     em.persist(retoAux);
@@ -79,12 +78,11 @@ public class retoService {
                 em.persist(retoAux);
             }
             et.commit();
-            guardado = true;
         } catch(Exception ex){
             et.rollback();
-            guardado = false;
+            retoAux = null;
         }
-        return guardado;
+        return retoAux;
     }
     
     /**
@@ -107,7 +105,7 @@ public class retoService {
      * @param team Equipo a consultar lista de retos
      * @return lista de tipo match
      */
-    public List<Reto> getMatchList(Equipo team){
+    public List<Reto> getRetoList(Equipo team){
         List<Reto> list;
         if(team.getEquId()!=null){
             Equipo teamAux;
@@ -157,7 +155,7 @@ public class retoService {
      * @return lista de tipo reto
      */
     public List<Reto> getRetoList(Cancha cancha, Date fecha){
-        List<Reto> fullList = getRetoList(cancha);
+        List<Reto> fullList = retoService.this.getRetoList(cancha);
         List<Reto> retornableList;
         if(fullList != null){
             ArrayList<Reto> list = new ArrayList<>(fullList);

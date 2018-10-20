@@ -57,12 +57,11 @@ public class adminService {
      * @param admin
      * @return 
      */
-    public boolean guardarAdmin(Administrador admin){
-        boolean guardado;
+    public Administrador guardarAdmin(Administrador admin){
+        Administrador adminAux;
+        et = em.getTransaction();
+        et.begin();
         try{
-            et = em.getTransaction();
-            et.begin();
-            Administrador adminAux;
             if(admin.getAdmId()!=null){
                 Query qryUsu = em.createNamedQuery("Administrador.findByAdmUsu",Administrador.class);            
                 qryUsu.setParameter("admUsu", admin.getAdmUsu());   
@@ -77,18 +76,16 @@ public class adminService {
             if(adminAux != null){
                 adminAux = admin;
                 em.merge(adminAux);
-                guardado = true;
             } else {
                 adminAux = admin;
                 em.persist(adminAux);
                 et.commit();
-                guardado = true;
             }
         }catch(Exception ex){
             et.rollback();
-            guardado = false;
+            adminAux = null;
         }
-        return guardado;
+        return adminAux;
     }
     
  }
