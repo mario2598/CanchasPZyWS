@@ -8,10 +8,12 @@ package canchaspz.model;
 import canchaspz.util.DateUtil;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
+import static jdk.nashorn.internal.objects.NativeDate.getTime;
 
 /**
  *
@@ -83,8 +85,12 @@ public class CanchaDto {
         this.tel.set(cancha.getCanTel().toString());
         this.cantJugadores.set(cancha.getCanCantJugadores().toString());
         this.direccion.set(cancha.getCanDireccion());
-        this.latitud.set(cancha.getCanLatitud().toString());
-        this.longitud.set(cancha.getCanLongitud().toString());
+        try{
+            this.latitud.set(cancha.getCanLatitud().toString());
+            this.longitud.set(cancha.getCanLongitud().toString());
+        } catch (NullPointerException ex){
+            
+        }
         this.abre.set(cancha.getCanAbre().toString());
         this.cierra.set(cancha.getCanCierra().toString());
         this.precioDia.set(cancha.getCanPrecioDia().toString());
@@ -161,6 +167,11 @@ public class CanchaDto {
         info.put("earnedMoney", new SimpleStringProperty(getEarnedMoney(startDate,endDate).toString()));
         info.put("emptySpaces", new SimpleStringProperty(getEmptySpaces(startDate,endDate,spacesAtDay).toString()));    
         
+        System.out.println("espacios disponibles por día :"+spacesAtDay);
+        System.out.println("espacios entre esas fechas :"+getTotalSpacesIntoDates(startDate,endDate,spacesAtDay).toString());  
+        System.out.println("partidos jugados entre esas fechas :"+getOccupedSpaces(startDate,endDate).toString());
+        System.out.println("espacios vacíos :"+getEmptySpaces(startDate,endDate,spacesAtDay));
+        
         return info;
     }
     
@@ -186,7 +197,22 @@ public class CanchaDto {
         ArrayList<Match> arrayListMatches=new ArrayList<>();
         arrayListMatches.addAll(this.getMatches());
         occupedSpaces = arrayListMatches.stream().filter((m) -> ((m.getMatDate().compareTo(startDate))==1||((m.getMatDate().compareTo(startDate))==0)
-                &&(m.getMatDate().compareTo(endDate)==-1)||(m.getMatDate().compareTo(endDate)==0))&&"s".equals(m.getMatDisputado())).map((_item) -> 1).reduce(occupedSpaces, Integer::sum);
+                &&(m.getMatDate().compareTo(endDate)==-1)||(m.getMatDate().compareTo(endDate)==0))&&"s".equalsIgnoreCase(m.getMatDisputado())).map((_item) -> 1).reduce(occupedSpaces, Integer::sum);
+        return occupedSpaces;
+    }
+    
+    /**
+     * retorna la cantidad de espacios ocupados en un día
+     * @param date
+     * @return 
+     */
+    public Integer getOccupedSpaces(Date date){
+        //calcula los partidos jugados entre dos fechas
+        Cancha field = new Cancha(this);
+        Integer occupedSpaces=0;
+        ArrayList<Match> arrayListMatches=new ArrayList<>();
+        arrayListMatches.addAll(this.getMatches());
+        occupedSpaces = arrayListMatches.stream().filter((m) -> ((m.getMatDate().compareTo(date))==0)&&"s".equalsIgnoreCase(m.getMatDisputado())).map((_item) -> 1).reduce(occupedSpaces, Integer::sum);
         return occupedSpaces;
     }
     
@@ -204,7 +230,18 @@ public class CanchaDto {
         arrayListMatches.addAll(this.getMatches());
         earnedMoney = arrayListMatches.stream().filter((m) -> ((m.getMatDate().compareTo(startDate))==1||((m.getMatDate().compareTo(startDate))==0)
                 &&(m.getMatDate().compareTo(endDate)==-1)||(m.getMatDate().compareTo(endDate)==0))
-                &&"s".equals(m.getMatDisputado())).map((m) -> m.getMatCobro().intValue()).reduce(earnedMoney, Integer::sum);
+                &&"s".equalsIgnoreCase(m.getMatDisputado())).map((m) -> m.getMatCobro().intValue()).reduce(earnedMoney, Integer::sum);
+        return earnedMoney;
+    }
+    
+    public Integer getEarnedMoney(Date date){
+        //calcula el dinero recaudadoentre dos fechas
+        Cancha field = new Cancha(this);
+        Integer earnedMoney=0;
+        ArrayList<Match> arrayListMatches=new ArrayList<>();
+        arrayListMatches.addAll(this.getMatches());
+        earnedMoney = arrayListMatches.stream().filter((m) -> ((m.getMatDate().compareTo(date))==0)
+                &&"s".equalsIgnoreCase(m.getMatDisputado())).map((m) -> m.getMatCobro().intValue()).reduce(earnedMoney, Integer::sum);
         return earnedMoney;
     }
     
@@ -224,6 +261,53 @@ public class CanchaDto {
         return totalSpaces-occupedSpaces;
     }
      
+    /**
+     * retorna la cantidad de espacios vacíos en un día
+     * @param date
+     * @return 
+     */
+    public Integer getEmptySpaces(Date date){
+        Integer totalSpaces=getSpacesAtDay();
+        Integer occupedSpaces=getOccupedSpaces(date);
+        return totalSpaces-occupedSpaces;
+    }
+    
+    public ArrayList<String[]> getDayReport(Date startDate,Date endDate){
+        Calendar auxDate = Calendar.getInstance();
+        auxDate.setTime(startDate);
+        Integer iterations=DateUtil.daysUntil2Dates(startDate, endDate);
+        ArrayList<String[]> array=new ArrayList<>();
+        for(int i=0;i<iterations;i++){
+            String[] data={
+                DateUtil.date2String(auxDate.getTime()),
+                getOccupedSpaces(auxDate.getTime()).toString(),
+                getEmptySpaces(auxDate.getTime()).toString(),
+                getEarnedMoney(auxDate.getTime()).toString()
+            };
+            array.add(data);
+            auxDate.add(Calendar.DATE, 1);//agrega un día más
+        }
+        return array;
+    }
+    
+    public ArrayList<String[]> getDayReportPrueba(Date startDate,Date endDate){
+        Calendar auxDate = Calendar.getInstance();
+        auxDate.setTime(startDate);
+        Integer iterations=DateUtil.daysUntil2Dates(startDate, endDate);
+        ArrayList<String[]> array=new ArrayList<>();
+        for(int i=0;i<iterations;i++){
+            String[] data={
+                DateUtil.date2String(auxDate.getTime()),
+                "0",
+                "0",
+                "1000"
+            };
+            array.add(data);
+            auxDate.add(Calendar.DATE, 1);//agrega un día más
+        }
+        return array;
+    }
+    
     //Setters and Getters
     public Long getCanID() {
         if(ID.get()!=null)
@@ -379,13 +463,6 @@ public class CanchaDto {
 
     public void setNombre(String nombre) {
         this.nombre.set(nombre);
-    }
-    
-    //hacer stream con filtros (parecido al de partidos entre fechas)
-    public ArrayList<Match> getMatchesIntoDates(){
-        ArrayList<Match> arrayListMatches=new ArrayList<>();
-        arrayListMatches.addAll(this.getMatches());
-        return arrayListMatches;
     }
     
 }
