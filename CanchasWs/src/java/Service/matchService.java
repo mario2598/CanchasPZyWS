@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -29,7 +28,6 @@ import javax.persistence.Query;
 public class matchService {
     @PersistenceContext(unitName = "CanchasWsPU")
     private EntityManager em;
-    private EntityTransaction et;
     
     public Match getMatch(Long matchId){
         Match retorno;
@@ -54,21 +52,17 @@ public class matchService {
      */
     public Match guardarMatch(Match match){
         Match matchAux;
-        et = em.getTransaction();
-        et.begin();
         try{
-            if(match.getCanId()!=null){
-                Query qry = em.createNamedQuery("Cancha.findByCanId", Cancha.class);
-                qry.setParameter("canId", match.getCanId());
+            if(match.getMatId()!=null){
+                Query qry = em.createNamedQuery("Match.findByMatId", Match.class);
+                qry.setParameter("matId", match.getMatId());
                 try{
                     matchAux = (Match) qry.getSingleResult();
                 } catch(NoResultException ex){
                     matchAux = null;
                 }
                 if(matchAux != null){
-                    //Ya existe una cancha con el mismo id en la base de datos
-                    matchAux = match;
-                    em.merge(matchAux);
+                    matchAux = em.merge(match);
                 } else {
                     matchAux = match;
                     em.persist(matchAux);
@@ -77,9 +71,8 @@ public class matchService {
                 matchAux = match;
                 em.persist(matchAux);
             }
-            et.commit();
+            em.flush();
         } catch(Exception ex){
-            et.rollback();
             matchAux = null;
         }
         return matchAux;

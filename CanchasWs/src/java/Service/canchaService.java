@@ -10,7 +10,6 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -24,7 +23,6 @@ import javax.persistence.Query;
 public class canchaService {
     @PersistenceContext(unitName = "CanchasWsPU")
     private EntityManager em;
-    private EntityTransaction et;
     
     public Cancha getCancha(Long canId){
         Cancha cancha;
@@ -46,8 +44,6 @@ public class canchaService {
      */
     public Cancha guardarCancha(Cancha cancha){
         Cancha canchaAux;
-        et = em.getTransaction();
-        et.begin();
         try{
             if(cancha.getCanId()!=null){
                 Query qry = em.createNamedQuery("Cancha.findByCanId", Cancha.class);
@@ -58,9 +54,7 @@ public class canchaService {
                     canchaAux = null;
                 }
                 if(canchaAux != null){
-                    //Ya existe una cancha con el mismo id en la base de datos
-                    canchaAux = cancha;
-                    em.merge(canchaAux);
+                    canchaAux = em.merge(cancha);
                 } else {
                     canchaAux = cancha;
                     em.persist(canchaAux);
@@ -69,9 +63,8 @@ public class canchaService {
                 canchaAux = cancha;
                 em.persist(canchaAux);
             }
-            et.commit();
+            em.flush();
         } catch(Exception ex){
-            et.rollback();
             canchaAux = null;
         }
         return canchaAux;

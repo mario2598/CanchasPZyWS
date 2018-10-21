@@ -64,21 +64,25 @@ public class CanchaDto {
     
     public void convertirListaPartidos(List<Match> list){
         this.matchList = new ArrayList<>();
-        for(Match match : list){
-            MatchDto newM = new MatchDto(match);
-            newM.canId = (this);
-            newM.copiarSoloIDEquipos(match);
-            matchList.add(newM);
+        if(list!=null && !list.isEmpty()){
+            for(Match match : list){
+                MatchDto newM = new MatchDto(match);
+    //            newM.canId = (this);
+                newM.copiarSoloIDEquipos(match);
+                matchList.add(newM);
+            }
         }
     }
     
     public void convertirListaRetos(List<Reto> list){
         this.retoList = new ArrayList<>();
-        for(Reto reto : list){
-            RetoDto newR = new RetoDto(reto);
-            newR.canchaId = (this);
-            newR.copiarSoloIDEquipos(reto);
-            retoList.add(newR);
+        if(list!=null && !list.isEmpty()){
+            for(Reto reto : list){
+                RetoDto newR = new RetoDto(reto);
+    //            newR.canchaId = (this);
+                newR.copiarSoloIDEquipos(reto);
+                retoList.add(newR);
+            }
         }
     }
     

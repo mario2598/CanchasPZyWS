@@ -70,8 +70,6 @@ public class equipoService {
      */
     public Equipo guardarEquipo(Equipo team){
         Equipo equipoAux;
-        et = em.getTransaction();
-        et.begin();
         try{
             if(team.getEquId()!=null){
                 Query qryUsu = em.createNamedQuery("Equipo.findByEquId", Equipo.class);            
@@ -81,17 +79,17 @@ public class equipoService {
                 } catch (NoResultException ex) {
                     equipoAux = null;
                 }
-            } else {
-                equipoAux = null;
-            }
-            if(equipoAux != null){
-                equipoAux = team;
-                em.merge(equipoAux);
+                if(equipoAux != null){
+                    equipoAux = em.merge(team);
+                } else {
+                    equipoAux = team;
+                    em.persist(equipoAux);
+                }
             } else {
                 equipoAux = team;
                 em.persist(equipoAux);
             }
-            et.commit();
+            em.flush();
         }catch(Exception ex){
             et.rollback();
             equipoAux = null;

@@ -13,15 +13,16 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -52,14 +53,16 @@ public class Cancha implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name="FIELD_SEQ_NAME",sequenceName="UNA.CANCHA_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="FIELD_SEQ_NAME")
     @Basic(optional = false)
-    @NotNull
+//    @NotNull
     @Column(name = "CAN_ID")
     private Long canId;
-    @Size(max = 30)
+//    @Size(max = 30)
     @Column(name = "CAN_NOMBRE")
     private String canNombre;
-    @Size(max = 150)
+//    @Size(max = 150)
     @Column(name = "CAN_DIRECCION")
     private String canDireccion;
     @Column(name = "CAN_CANT_JUGADORES")
@@ -78,25 +81,29 @@ public class Cancha implements Serializable {
     private Integer canCierra;
     @Column(name = "CAN_ABRE")
     private Integer canAbre;
-    @Size(max = 200)
+//    @Size(max = 200)
     @Column(name = "CAN_URL")
     private String canUrl;
     @JoinColumn(name = "ADM_ID", referencedColumnName = "ADM_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Administrador admId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "canchaId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "canchaId", fetch = FetchType.EAGER)
     private List<Reto> retoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "canId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "canId", fetch = FetchType.EAGER)
     private List<Match> matchList;
 
     public Cancha() {
+        this.retoList = new ArrayList<>();
+        this.matchList = new ArrayList<>();
     }
 
     public Cancha(Long canId) {
+        super();
         this.canId = canId;
     }
     
     public Cancha(CanchaDto canchaDto){
+        super();
         if(canchaDto.canId!=null){
             this.canId = canchaDto.canId;
         }
@@ -119,21 +126,25 @@ public class Cancha implements Serializable {
     
     public void convertirListaPartidos(List<MatchDto> list){
         this.matchList = new ArrayList<>();
-        for(MatchDto matchDto : list){
-            Match newM = new Match(matchDto);
-            newM.setCanId(this);
-            newM.copiarSoloIDEquipos(matchDto);
-            this.matchList.add(newM);
+        if(list!=null && !list.isEmpty()){
+            for(MatchDto matchDto : list){
+                Match newM = new Match(matchDto);
+                newM.setCanId(this);
+                newM.copiarSoloIDEquipos(matchDto);
+                this.matchList.add(newM);
+            }
         }
     }
     
     public void convertirListaRetos(List<RetoDto> list){
         this.retoList = new ArrayList<>();
-        for(RetoDto retoDto : list){
-            Reto newR = new Reto(retoDto);
-            newR.setCanchaId(this);
-            newR.copiarSoloIDEquipos(retoDto);
-            this.retoList.add(newR);
+        if(list!=null && !list.isEmpty()){
+            for(RetoDto retoDto : list){
+                Reto newR = new Reto(retoDto);
+                newR.setCanchaId(this);
+                newR.copiarSoloIDEquipos(retoDto);
+                this.retoList.add(newR);
+            }
         }
     }
 

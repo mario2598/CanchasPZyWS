@@ -13,15 +13,16 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -50,28 +51,30 @@ public class Equipo implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name="EQU_SEQ_NAME",sequenceName="UNA.EQU_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="EQU_SEQ_NAME")
     @Basic(optional = false)
-    @NotNull
+//    @NotNull
     @Column(name = "EQU_ID")
     private Long equId;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+//    @NotNull
+//    @Size(min = 1, max = 20)
     @Column(name = "EQU_USU")
     private String equUsu;
-    @Size(max = 20)
+//    @Size(max = 20)
     @Column(name = "EQU_PASSWORD")
     private String equPassword;
-    @Size(max = 20)
+//    @Size(max = 20)
     @Column(name = "EQU_NOMBRE")
     private String equNombre;
-    @Size(max = 20)
+//    @Size(max = 20)
     @Column(name = "EQU_NOM_JUG1")
     private String equNomJug1;
-    @Size(max = 20)
+//    @Size(max = 20)
     @Column(name = "EQU_NOM_JUG2")
     private String equNomJug2;
-    @Size(max = 200)
+//    @Size(max = 200)
     @Column(name = "EQU_URL")
     private String equUrl;
     @Column(name = "EQU_TEL_JUG2")
@@ -83,28 +86,35 @@ public class Equipo implements Serializable {
     @JoinColumn(name = "RETO_ID", referencedColumnName = "RETO_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Reto retoId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipo1Id", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipo1Id", fetch = FetchType.EAGER)
     private List<Reto> retoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipo2Id", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipo2Id", fetch = FetchType.EAGER)
     private List<Reto> retoList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equId2", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equId2", fetch = FetchType.EAGER)
     private List<Match> matchList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equId1", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equId1", fetch = FetchType.EAGER)
     private List<Match> matchList1;
 
     public Equipo() {
+        this.matchList = new ArrayList<>();
+        this.matchList1 = new ArrayList<>();
+        this.retoList = new ArrayList<>();
+        this.retoList1 = new ArrayList<>();
     }
 
     public Equipo(Long equId) {
+        super();
         this.equId = equId;
     }
 
     public Equipo(Long equId, String equUsu) {
+        super();
         this.equId = equId;
         this.equUsu = equUsu;
     }
     
     public Equipo(EquipoDto equipoDto){
+        super();
         if(equipoDto.equId!=null){
             this.equId = equipoDto.equId;
         }
@@ -131,31 +141,37 @@ public class Equipo implements Serializable {
     public void convertirListaPartidos(List<MatchDto> list, List<MatchDto> list1){
         this.matchList = new ArrayList<>();
         this.matchList1 = new ArrayList<>();
-        for(MatchDto match : list){
-            Match newM = new Match(match);
-            newM.copiarSoloIDEquipos(match);
-            newM.setEquId1(this);
-            newM.copiarSoloIdCancha(match);
-            matchList.add(newM);
+        if(list!=null && !list.isEmpty()){
+            for(MatchDto match : list){
+                Match newM = new Match(match);
+                newM.copiarSoloIDEquipos(match);
+                newM.setEquId1(this);
+                newM.copiarSoloIdCancha(match);
+                matchList.add(newM);
+            }
         }
-        for(MatchDto match : list1){
-            Match newM = new Match(match);
-            newM.copiarSoloIDEquipos(match);
-            newM.setEquId2(this);
-            newM.copiarSoloIdCancha(match);
-            matchList1.add(newM);
+        if(list1!=null && !list1.isEmpty()){
+            for(MatchDto match : list1){
+                Match newM = new Match(match);
+                newM.copiarSoloIDEquipos(match);
+                newM.setEquId2(this);
+                newM.copiarSoloIdCancha(match);
+                matchList1.add(newM);
+            }
         }
     }
     
     public void convertirListaRetos(List<RetoDto> list){
         this.retoList = new ArrayList<>();
         this.retoList1 = null; //Esta lista de retos siempre estara vacia, una vez aceptado el reto es eliminado de la base de datos
-        for(RetoDto reto : list){
-            Reto newR = new Reto(reto);
-            newR.setEquipo1Id(this);
-            newR.setEquipo2Id(null);
-            newR.copiarSoloIdCancha(reto);
-            retoList.add(newR);
+        if(list!=null && !list.isEmpty()){
+            for(RetoDto reto : list){
+                Reto newR = new Reto(reto);
+                newR.setEquipo1Id(this);
+                newR.setEquipo2Id(null);
+                newR.copiarSoloIdCancha(reto);
+                retoList.add(newR);
+            }
         }
     }
 

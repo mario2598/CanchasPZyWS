@@ -22,7 +22,6 @@ import Service.matchService;
 import Service.retoService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -51,15 +50,7 @@ public class WS {
      */
     @WebMethod(operationName = "testing")
     public Boolean testing() {
-        Cancha field = canchaService.getCancha(new Long(64));
-        CanchaDto fieldDto = new CanchaDto(field);
-        fieldDto.convertirListaPartidos(field.getMatchList());
-        fieldDto.convertirListaRetos(field.getRetoList());
-        if(!fieldDto.matchList.isEmpty()){
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -76,9 +67,14 @@ public class WS {
     @WebMethod(operationName = "getAdmin")
     public AdministradorDto getAdmin(@WebParam(name = "usu") String usu, @WebParam(name = "contra") String contra) {
         Administrador admin;
-        admin =  adminService.getAdmin(usu, contra);
-        AdministradorDto adminDto = new AdministradorDto(admin);
-        adminDto.convertirListaCanchas(admin.getCanchaList());
+        AdministradorDto adminDto = null;
+        if((usu!=null && !usu.isEmpty()) && (contra!=null && !contra.isEmpty())){
+            admin = adminService.getAdmin(usu, contra);
+            if(admin!=null){
+                adminDto = new AdministradorDto(admin);
+                adminDto.convertirListaCanchas(admin.getCanchaList());
+            }
+        }
         return adminDto;
     }
     
@@ -168,6 +164,29 @@ public class WS {
                 listDto.add(newR);
             }
             return listDto; 
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Web service operation
+     * Consulta de la lista completa de equipos presentes en la base de datos
+     * @return lista de equipos
+     */
+    @WebMethod(operationName = "getListaEquipos")
+    public List<EquipoDto> getListaEquipos() {
+        List<Equipo> list;
+        list = teamService.getListaEquipos();
+        if(list!=null && !list.isEmpty()){
+            List<EquipoDto> listDto = new ArrayList<>();
+            for(Equipo team : list){
+                EquipoDto newE = new EquipoDto(team);
+                newE.convertirListaPartidos(team.getMatchList(), team.getMatchList1());
+                newE.convertirListaRetos(team.getRetoList());
+                listDto.add(newE);
+            }
+            return listDto;
         } else {
             return null;
         }
@@ -436,24 +455,13 @@ public class WS {
         if(administradorDto!=null){
             Administrador admin = new Administrador(administradorDto);
             admin.convertirListaCanchas(administradorDto.canchaList);
-            for(Cancha cancha : admin.getCanchaList()){
-                for(Match match : cancha.getMatchList()){
-                    Equipo team = match.getEquId1();
-                    Equipo teamAux = teamService.getEquipo(team.getEquId());
-                    match.setEquId1(teamAux);
-                    team = match.getEquId2();
-                    teamAux = teamService.getEquipo(team.getEquId());
-                    match.setEquId2(teamAux);
-                }
-                for(Reto reto : cancha.getRetoList()){
-                    Equipo team = reto.getEquipo1Id();
-                    Equipo teamAux = teamService.getEquipo(team.getEquId());
-                    reto.setEquipo1Id(teamAux);
-                }
-            }
             Administrador adminAux = adminService.guardarAdmin(admin);
             AdministradorDto retorno = administradorDto;
-            retorno.adminId = adminAux.getAdmId();
+            if(adminAux!=null && adminAux.getAdmId()!=null){
+                retorno.adminId = adminAux.getAdmId();
+            } else {
+                retorno = null;
+            }
             return retorno;
         } else {
             return null;
@@ -473,25 +481,16 @@ public class WS {
             Cancha cancha = new Cancha(canchaDto);
             cancha.convertirListaPartidos(canchaDto.matchList);
             cancha.convertirListaRetos(canchaDto.retoList);
-            cancha.copiarInfo(canchaDto);
-            Administrador admin = adminService.getAdmin(cancha.getAdmId().getAdmId());
+            Administrador admin = adminService.getAdmin(canchaDto.admId.adminId);
+            admin.getCanchaList().add(cancha);
             cancha.setAdmId(admin);
-            for(Match match : cancha.getMatchList()){
-                Equipo team = match.getEquId1();
-                Equipo teamAux = teamService.getEquipo(team.getEquId());
-                match.setEquId1(teamAux);
-                team = match.getEquId2();
-                teamAux = teamService.getEquipo(team.getEquId());
-                match.setEquId2(teamAux);
-            }
-            for(Reto reto : cancha.getRetoList()){
-                Equipo team = reto.getEquipo1Id();
-                Equipo teamAux = teamService.getEquipo(team.getEquId());
-                reto.setEquipo1Id(teamAux);
-            }
             Cancha canchaAux = canchaService.guardarCancha(cancha);
             CanchaDto retorno = canchaDto;
-            retorno.canId = canchaAux.getCanId();
+            if(canchaAux!=null && canchaAux.getCanId()!=null){
+                retorno.canId = canchaAux.getCanId();
+            } else {
+                retorno = null;
+            }
             return retorno;
         } else {
             return null;
@@ -511,10 +510,12 @@ public class WS {
             Equipo equipo = new Equipo(equipoDto);
             equipo.convertirListaPartidos(equipoDto.matchList, equipoDto.matchList1);
             equipo.convertirListaRetos(equipoDto.retoList);
-            //Tal vez haga falta rellenar los equipos y las canchas de los partidos
             Equipo equipoAux = teamService.guardarEquipo(equipo);
             EquipoDto retorno = equipoDto;
-            retorno.equId = equipoAux.getEquId();
+            if(equipoAux != null && equipoAux.getEquId()!=null)
+                retorno.equId = equipoAux.getEquId();
+            else
+                retorno = null;
             return retorno;
         } else {
             return null;
@@ -532,12 +533,27 @@ public class WS {
     public MatchDto setMatch(@WebParam(name = "matchDto") MatchDto matchDto) {
         if(matchDto!=null){
             Match match = new Match(matchDto);
-            match.copiarSoloIDEquipos(matchDto);
-            match.copiarSoloIdCancha(matchDto);
-            //Tal vez haga falta rellenar los equipos y la cancha
+            Equipo team1 = null, team2 = null;
+            Cancha field;
+            if(matchDto.equId1!=null){
+                team1 = teamService.getEquipo(matchDto.equId1.equId);
+                team1.getMatchList().add(match);
+            }
+            if(matchDto.equId2!=null){
+                team2 = teamService.getEquipo(matchDto.equId2.equId);
+                team2.getMatchList1().add(match);
+            }
+            field = canchaService.getCancha(matchDto.canId.canId);
+            field.getMatchList().add(match);
+            match.setEquId1(team1);
+            match.setEquId2(team2);
+            match.setCanId(field);
             Match matchAux = matchService.guardarMatch(match);
             MatchDto retorno = matchDto;
-            retorno.matId = matchAux.getMatId();
+            if(matchAux != null && matchAux.getMatId()!= null)
+                retorno.matId = matchAux.getMatId();
+            else
+                retorno = null;
             return retorno;
         } else {
             return null;
@@ -555,17 +571,110 @@ public class WS {
     public RetoDto setReto(@WebParam(name = "retoDto") RetoDto retoDto) {
         if(retoDto!=null){
             Reto reto = new Reto(retoDto);
-            reto.copiarSoloIDEquipos(retoDto);
-            reto.copiarSoloIdCancha(retoDto);
-            //Tal vez haga falta rellenar los equipos y la cancha
+            Equipo team1 = null;
+            Cancha field = null;
+            if(retoDto.equipo1Id!=null){
+                team1 = teamService.getEquipo(retoDto.equipo1Id.equId);
+                team1.getRetoList().add(reto);
+                teamService.guardarEquipo(team1);
+            }
+            field = canchaService.getCancha(retoDto.canchaId.canId);
+            field.getRetoList().add(reto);
+            canchaService.guardarCancha(field);
+            reto.setEquipo1Id(team1);
+            reto.setEquipo2Id(null);
+            reto.setCanchaId(field);
             Reto retoAux = retoService.guardarReto(reto);
             RetoDto retorno = retoDto;
-            retorno.retoId = retoAux.getRetoId();
+            if(retoAux != null && retoAux.getRetoId()!=null)
+                retorno.retoId = retoAux.getRetoId();
+            else
+                retorno = null;
             return retorno;
         } else {
             return null;
         }
     }
 
+//    /**
+//     * Web service operation
+//     * @param reporte
+//     * @return
+//     * @throws JRException
+//     * @throws FileNotFoundException 
+//     */
+//    @WebMethod(operationName = "crearReporte")
+//    public File crearReporte(@WebParam(name = "reporte") cobro reporte) throws JRException, FileNotFoundException {
+////         String userHomeDirect = System.getProperty("user.home");
+////         String outPutFile = "src/cineuna/jasperReport/jasperPrueba.pdf";
+////         List<cobro> list = new ArrayList<>();         
+////         list.add(reporte);
+////         JRBeanCollectionDataSource cobrojrb = new JRBeanCollectionDataSource(list);
+////         JasperReport jasperReport = JasperCompileManager.compileReport("src/cineuna/jasperReport/reporteCanchasPZu.jrxml");
+////         Map<String, Object> parametros = new HashMap<>();
+////         parametros.put("dataSource", cobrojrb);
+////         JasperPrint jasperprint = JasperFillManager.fillReport(jasperReport, parametros, new JREmptyDataSource());
+////         
+////         OutputStream outputStream = new FileOutputStream(new File(outPutFile));
+////            /* Write content to PDF file */
+////         JasperExportManager.exportReportToPdfStream(jasperprint, outputStream);
+////         File png = new File("src/cineuna/jasperReport/jasperPrueba.pdf");
+////         return png;
+//    }
+
+    /**
+     * Web service operation
+     * @param adminId
+     * @return 
+     */
+    @WebMethod(operationName = "deleteAdmin")
+    public Boolean deleteAdmin(@WebParam(name = "adminId") Long adminId) {
+        //TODO write your implementation code here:
+        return null;
+    }
+
+    /**
+     * Web service operation
+     * @param equipoId
+     * @return 
+     */
+    @WebMethod(operationName = "deleteEquipo")
+    public Boolean deleteEquipo(@WebParam(name = "equipoId") Long equipoId) {
+        //TODO write your implementation code here:
+        return null;
+    }
+
+    /**
+     * Web service operation
+     * @param canchaId
+     * @return 
+     */
+    @WebMethod(operationName = "deleteCancha")
+    public Boolean deleteCancha(@WebParam(name = "canchaId") Long canchaId) {
+        //TODO write your implementation code here:
+        return null;
+    }
+
+    /**
+     * Web service operation
+     * @param matchId
+     * @return 
+     */
+    @WebMethod(operationName = "deleteMatch")
+    public Boolean deleteMatch(@WebParam(name = "matchId") Long matchId) {
+        //TODO write your implementation code here:
+        return null;
+    }
+
+    /**
+     * Web service operation
+     * @param retoId
+     * @return 
+     */
+    @WebMethod(operationName = "deleteReto")
+    public Boolean deleteReto(@WebParam(name = "retoId") Long retoId) {
+        //TODO write your implementation code here:
+        return null;
+    }
     
 }

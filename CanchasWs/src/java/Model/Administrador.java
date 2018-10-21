@@ -13,10 +13,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -38,37 +41,43 @@ public class Administrador implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name="ADMIN_SEQ_NAME",sequenceName="UNA.ADM_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ADMIN_SEQ_NAME")
     @Basic(optional = false)
-   // @NotNull
+//    @NotNull
     @Column(name = "ADM_ID")
     private Long admId;
     @Basic(optional = false)
- //   @NotNull
-  //  @Size(min = 1, max = 30)
+//    @NotNull
+//    @Size(min = 1, max = 30)
     @Column(name = "ADM_USU")
     private String admUsu;
     @Basic(optional = false)
- //   @NotNull
-  //  @Size(min = 1, max = 30)
+//    @NotNull
+//    @Size(min = 1, max = 30)
     @Column(name = "ADM_PASSWORD")
     private String admPassword;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "admId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "admId", fetch = FetchType.EAGER)
     private List<Cancha> canchaList;
 
     public Administrador() {
+        this.canchaList = new ArrayList<>();
     }
 
     public Administrador(Long admId) {
+        super();
         this.admId = admId;
     }
 
     public Administrador(Long admId, String admUsu, String admPassword) {
+        super();
         this.admId = admId;
         this.admUsu = admUsu;
         this.admPassword = admPassword;
     }
     
     public Administrador(AdministradorDto adminDto){
+        super();
         if(adminDto.adminId != null){
             this.admId = adminDto.adminId;
         }
@@ -82,12 +91,14 @@ public class Administrador implements Serializable {
     
     public void convertirListaCanchas(List<CanchaDto> list){
         this.canchaList = new ArrayList<>();
-        for(CanchaDto cancha : list){
-            Cancha newC = new Cancha(cancha);
-            newC.setAdmId(this);
-            newC.convertirListaPartidos(cancha.matchList);
-            newC.convertirListaRetos(cancha.retoList);
-            canchaList.add(newC);
+        if(list!=null && !list.isEmpty()){
+            for(CanchaDto cancha : list){
+                Cancha newC = new Cancha(cancha);
+                newC.setAdmId(this);
+                newC.convertirListaPartidos(cancha.matchList);
+                newC.convertirListaRetos(cancha.retoList);
+                canchaList.add(newC);
+            }
         }
     }
 

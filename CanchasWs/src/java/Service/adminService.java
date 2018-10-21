@@ -6,10 +6,10 @@
 package Service;
 
 import Model.Administrador;
+import java.lang.annotation.AnnotationFormatError;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -24,7 +24,6 @@ public class adminService {
 
     @PersistenceContext(unitName = "CanchasWsPU") //asi se crean  estas  los service y se inyectan en la parte de WS con la anotacion @EJB
     private EntityManager em;
-    private EntityTransaction et;
     
     public Administrador getAdmin(String usu, String contra){
         Administrador admin; 
@@ -58,31 +57,42 @@ public class adminService {
      * @return 
      */
     public Administrador guardarAdmin(Administrador admin){
+        System.out.println("Intentando guardar el admin con los datos:");
+        System.out.println("ID: " + admin.getAdmId() + " Usu: " + admin.getAdmUsu() + " Pass: " + admin.getAdmPassword());
         Administrador adminAux;
-        et = em.getTransaction();
-        et.begin();
         try{
             if(admin.getAdmId()!=null){
-                Query qryUsu = em.createNamedQuery("Administrador.findByAdmUsu",Administrador.class);            
-                qryUsu.setParameter("admUsu", admin.getAdmUsu());   
+                Query qryId = em.createNamedQuery("Administrador.findByAdmId", Administrador.class);            
+                qryId.setParameter("admId", admin.getAdmId());   
                 try {
-                    adminAux = (Administrador) qryUsu.getSingleResult();
+                    adminAux = (Administrador) qryId.getSingleResult();
                 } catch (NoResultException ex) {
                     adminAux = null;
                 }
+                if(adminAux != null){
+                    adminAux = em.merge(admin);
+                } else {
+                    adminAux = admin;
+                    em.persist(adminAux);
+                }
             } else {
-                adminAux = null;
+                Query qryUsu = em.createNamedQuery("Administrador.findByAdmUsu", Administrador.class);            
+                qryUsu.setParameter("admUsu", admin.getAdmUsu());
+                try{
+                    adminAux = (Administrador) qryUsu.getSingleResult();
+                }catch(NoResultException ex){
+                    adminAux = null;
+                }
+                if(adminAux==null){
+                    adminAux = admin;
+                    em.persist(adminAux);
+                    adminAux = em.merge(admin);
+                } else {
+                    adminAux = null;
+                }
             }
-            if(adminAux != null){
-                adminAux = admin;
-                em.merge(adminAux);
-            } else {
-                adminAux = admin;
-                em.persist(adminAux);
-                et.commit();
-            }
-        }catch(Exception ex){
-            et.rollback();
+            em.flush();
+        }catch(Exception | AnnotationFormatError ex){
             adminAux = null;
         }
         return adminAux;

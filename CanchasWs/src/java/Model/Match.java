@@ -8,19 +8,21 @@ package Model;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -47,8 +49,10 @@ public class Match implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name="MATCH_SEQ_NAME",sequenceName="UNA.MATCH_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="MATCH_SEQ_NAME")
     @Basic(optional = false)
-    @NotNull
+//    @NotNull
     @Column(name = "MAT_ID")
     private Long matId;
     @Column(name = "MAT_DATE")
@@ -56,7 +60,7 @@ public class Match implements Serializable {
     private Date matDate;
     @Column(name = "MAT_HORA")
     private Integer matHora;
-    @Size(max = 1)
+//    @Size(max = 1)
     @Column(name = "MAT_DISPUTADO")
     private String matDisputado;
     @Column(name = "MAT_MARCADOR1")
@@ -70,13 +74,13 @@ public class Match implements Serializable {
     @Column(name = "EQU_WIN")
     private Integer equWin;
     @JoinColumn(name = "CAN_ID", referencedColumnName = "CAN_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Cancha canId;
     @JoinColumn(name = "EQU_ID2", referencedColumnName = "EQU_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Equipo equId2;
     @JoinColumn(name = "EQU_ID1", referencedColumnName = "EQU_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Equipo equId1;
 
     public Match() {

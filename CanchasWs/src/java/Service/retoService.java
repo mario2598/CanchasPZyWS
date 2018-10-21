@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -29,7 +28,6 @@ import javax.persistence.Query;
 public class retoService {
     @PersistenceContext(unitName = "CanchasWsPU")
     private EntityManager em;
-    private EntityTransaction et;
     
     public Reto getReto(Long retoId){
         Reto retorno;
@@ -54,21 +52,17 @@ public class retoService {
      */
     public Reto guardarReto(Reto reto){
         Reto retoAux;
-        et = em.getTransaction();
-        et.begin();
         try{
             if(reto.getRetoId()!=null){
                 Query qry = em.createNamedQuery("Reto.findByRetoId", Reto.class);
-                qry.setParameter("canId", reto.getRetoId());
+                qry.setParameter("retoId", reto.getRetoId());
                 try{
                     retoAux = (Reto) qry.getSingleResult();
                 } catch(NoResultException ex){
                     retoAux = null;
                 }
                 if(retoAux != null){
-                    //Ya existe un reto con el mismo id en la base de datos
-                    retoAux = reto;
-                    em.merge(retoAux);
+                    retoAux = em.merge(reto);
                 } else {
                     retoAux = reto;
                     em.persist(retoAux);
@@ -77,9 +71,8 @@ public class retoService {
                 retoAux = reto;
                 em.persist(retoAux);
             }
-            et.commit();
+            em.flush();
         } catch(Exception ex){
-            et.rollback();
             retoAux = null;
         }
         return retoAux;

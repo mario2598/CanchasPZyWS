@@ -67,28 +67,34 @@ public class EquipoDto {
     public void convertirListaPartidos(List<Match> list, List<Match> list1){
         this.matchList = new ArrayList<>();
         this.matchList1 = new ArrayList<>();
-        for(Match match : list){
-            MatchDto newM = new MatchDto(match);
-            newM.copiarSoloIDEquipos(match);
-            newM.copiarSoloIdCancha(match);
-            matchList.add(newM);
+        if(list!=null && !list.isEmpty()){
+            for(Match match : list){
+                MatchDto newM = new MatchDto(match);
+                newM.copiarSoloIDEquipos(match);
+                newM.copiarSoloIdCancha(match);
+                matchList.add(newM);
+            }
         }
-        for(Match match : list1){
-            MatchDto newM = new MatchDto(match);
-            newM.copiarSoloIDEquipos(match);
-            newM.copiarSoloIdCancha(match);
-            matchList1.add(newM);
+        if(list1!=null && !list1.isEmpty()){
+            for(Match match : list1){
+                MatchDto newM = new MatchDto(match);
+                newM.copiarSoloIDEquipos(match);
+                newM.copiarSoloIdCancha(match);
+                matchList1.add(newM);
+            }
         }
     }
     
     public void convertirListaRetos(List<Reto> list){
         this.retoList = new ArrayList<>();
         this.retoList1 = null; //Esta lista de retos siempre estara vacia, una vez aceptado el reto es eliminado de la base de datos
-        for(Reto reto : list){
-            RetoDto newR = new RetoDto(reto);
-            newR.copiarSoloIDEquipos(reto);
-            newR.copiarSoloIdCancha(reto);
-            retoList.add(newR);
+        if(list!=null && !list.isEmpty()){
+            for(Reto reto : list){
+                RetoDto newR = new RetoDto(reto);
+                newR.copiarSoloIDEquipos(reto);
+                newR.copiarSoloIdCancha(reto);
+                retoList.add(newR);
+            }
         }
     }
     

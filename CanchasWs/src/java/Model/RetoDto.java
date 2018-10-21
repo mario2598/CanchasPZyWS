@@ -49,11 +49,19 @@ public class RetoDto {
         this.retoNivel = reto.getRetoNivel();
     }
     
-    public void copiarSoloIDEquipos(Reto match){
-        this.equipo1Id = new EquipoDto();
-        this.equipo1Id.equId = (match.getEquipo1Id().getEquId());
-        this.equipo2Id = new EquipoDto();
-        this.equipo2Id.equId = (match.getEquipo2Id().getEquId());
+    public void copiarSoloIDEquipos(Reto reto){
+        if(reto.getEquipo1Id()!=null){
+            this.equipo1Id = new EquipoDto();
+            this.equipo1Id.equId = (reto.getEquipo1Id().getEquId());
+        } else {
+            this.equipo1Id = null;
+        }
+        if(reto.getEquipo2Id()!=null){
+            this.equipo2Id = new EquipoDto();
+            this.equipo2Id.equId = (reto.getEquipo2Id().getEquId());
+        } else {
+            this.equipo2Id = null;
+        }
     }
     
     public void copiarSoloIdCancha(Reto reto){

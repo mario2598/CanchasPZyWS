@@ -6,25 +6,25 @@
 package Model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -49,8 +49,10 @@ public class Reto implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name="RETO_SEQ_NAME",sequenceName="UNA.RETO_SEQ01",allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="RETO_SEQ_NAME")
     @Basic(optional = false)
-    @NotNull
+//    @NotNull
     @Column(name = "RETO_ID")
     private Long retoId;
     @Column(name = "RETO_HORA_INI")
@@ -60,7 +62,7 @@ public class Reto implements Serializable {
     @Column(name = "RETO_FECHA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date retoFecha;
-    @Size(max = 1)
+//    @Size(max = 1)
     @Column(name = "RETO_COMPLETO")
     private String retoCompleto;
     @Column(name = "RETO_NIVEL")
@@ -68,13 +70,13 @@ public class Reto implements Serializable {
     @OneToMany(mappedBy = "retoId", fetch = FetchType.LAZY)
     private List<Equipo> equipoList;
     @JoinColumn(name = "CANCHA_ID", referencedColumnName = "CAN_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Cancha canchaId;
     @JoinColumn(name = "EQUIPO1_ID", referencedColumnName = "EQU_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Equipo equipo1Id;
     @JoinColumn(name = "EQUIPO2_ID", referencedColumnName = "EQU_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Equipo equipo2Id;
 
     public Reto() {

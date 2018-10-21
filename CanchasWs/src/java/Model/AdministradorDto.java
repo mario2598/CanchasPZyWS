@@ -44,12 +44,14 @@ public class AdministradorDto {
     
     public void convertirListaCanchas(List<Cancha> list){
         this.canchaList = new ArrayList<>();
-        for(Cancha cancha : list){
-            CanchaDto newC = new CanchaDto(cancha);
-            newC.admId = null;
-            newC.convertirListaPartidos(cancha.getMatchList());
-            newC.convertirListaRetos(cancha.getRetoList());
-            canchaList.add(newC);
+        if(list!=null && !list.isEmpty()){
+            for(Cancha cancha : list){
+                CanchaDto newC = new CanchaDto(cancha);
+    //            newC.admId = this;
+                newC.convertirListaPartidos(cancha.getMatchList());
+                newC.convertirListaRetos(cancha.getRetoList());
+                this.canchaList.add(newC);
+            }
         }
     }
     
