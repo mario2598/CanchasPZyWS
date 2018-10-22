@@ -82,8 +82,7 @@ public class adminService {
                     adminAux = null;
                 }
                 if(adminAux==null){
-                    adminAux = admin;
-                    em.persist(adminAux);
+                    em.persist(admin);
                     adminAux = em.merge(admin);
                 } else {
                     adminAux = null;
