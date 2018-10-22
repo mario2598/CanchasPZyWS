@@ -108,10 +108,14 @@ public class WS {
     public EquipoDto getEquipo(@WebParam(name = "usu") String usu, @WebParam(name = "contra") String contra) {
         Equipo equipo;
         equipo = teamService.getEquipo(usu, contra);
-        EquipoDto equipoDto = new EquipoDto(equipo);
-        equipoDto.convertirListaPartidos(equipo.getMatchList(), equipo.getMatchList1());
-        equipoDto.convertirListaRetos(equipo.getRetoList());
-        return equipoDto;
+        if(equipo!=null){
+            EquipoDto equipoDto = new EquipoDto(equipo);
+            equipoDto.convertirListaPartidos(equipo.getMatchList(), equipo.getMatchList1());
+            equipoDto.convertirListaRetos(equipo.getRetoList());
+            return equipoDto;
+        } else {
+            return null;
+        }
     }
     
     /**
@@ -611,32 +615,6 @@ public class WS {
         }
     }
 
-//    /**
-//     * Web service operation
-//     * @param reporte
-//     * @return
-//     * @throws JRException
-//     * @throws FileNotFoundException 
-//     */
-//    @WebMethod(operationName = "crearReporte")
-//    public File crearReporte(@WebParam(name = "reporte") cobro reporte) throws JRException, FileNotFoundException {
-////         String userHomeDirect = System.getProperty("user.home");
-////         String outPutFile = "src/cineuna/jasperReport/jasperPrueba.pdf";
-////         List<cobro> list = new ArrayList<>();         
-////         list.add(reporte);
-////         JRBeanCollectionDataSource cobrojrb = new JRBeanCollectionDataSource(list);
-////         JasperReport jasperReport = JasperCompileManager.compileReport("src/cineuna/jasperReport/reporteCanchasPZu.jrxml");
-////         Map<String, Object> parametros = new HashMap<>();
-////         parametros.put("dataSource", cobrojrb);
-////         JasperPrint jasperprint = JasperFillManager.fillReport(jasperReport, parametros, new JREmptyDataSource());
-////         
-////         OutputStream outputStream = new FileOutputStream(new File(outPutFile));
-////            /* Write content to PDF file */
-////         JasperExportManager.exportReportToPdfStream(jasperprint, outputStream);
-////         File png = new File("src/cineuna/jasperReport/jasperPrueba.pdf");
-////         return png;
-//    }
-
     /**
      * Web service operation
      * @param adminId
@@ -644,8 +622,7 @@ public class WS {
      */
     @WebMethod(operationName = "deleteAdmin")
     public Boolean deleteAdmin(@WebParam(name = "adminId") Long adminId) {
-        //TODO write your implementation code here:
-        return null;
+        return adminService.eliminarAdmin(new Administrador(adminId));
     }
 
     /**
@@ -655,8 +632,7 @@ public class WS {
      */
     @WebMethod(operationName = "deleteEquipo")
     public Boolean deleteEquipo(@WebParam(name = "equipoId") Long equipoId) {
-        //TODO write your implementation code here:
-        return null;
+        return teamService.eliminarEquipo(new Equipo(equipoId));
     }
 
     /**
@@ -666,8 +642,7 @@ public class WS {
      */
     @WebMethod(operationName = "deleteCancha")
     public Boolean deleteCancha(@WebParam(name = "canchaId") Long canchaId) {
-        //TODO write your implementation code here:
-        return null;
+        return canchaService.eliminarCancha(new Cancha(canchaId));
     }
 
     /**
@@ -677,8 +652,7 @@ public class WS {
      */
     @WebMethod(operationName = "deleteMatch")
     public Boolean deleteMatch(@WebParam(name = "matchId") Long matchId) {
-        //TODO write your implementation code here:
-        return null;
+        return matchService.eliminarMatch(new Match(matchId));
     }
 
     /**
@@ -688,8 +662,7 @@ public class WS {
      */
     @WebMethod(operationName = "deleteReto")
     public Boolean deleteReto(@WebParam(name = "retoId") Long retoId) {
-        //TODO write your implementation code here:
-        return null;
+        return retoService.eliminarReto(new Reto(retoId));
     }
 
     /**
@@ -698,19 +671,19 @@ public class WS {
     @WebMethod(operationName = "ganerateJasperReport")
     public File ganerateJasperReport(@WebParam(name = "reporte") report reporte) throws JRException, FileNotFoundException {
         String userHomeDirect = System.getProperty("user.home");
-         String outPutFile = "src/java/jasper/jasperPrueba.pdf";
-         List<report> list = new ArrayList<>();         
-         list.add(reporte);
-         JRBeanCollectionDataSource cobrojrb = new JRBeanCollectionDataSource(list);
-         JasperReport jasperReport = JasperCompileManager.compileReport("src/java/jasper/reporteCanchasPZ.jrxml");
-         Map<String, Object> parametros = new HashMap<>();
-         parametros.put("dataSource", cobrojrb);
-         JasperPrint jasperprint = JasperFillManager.fillReport(jasperReport, parametros, new JREmptyDataSource());        
-         OutputStream outputStream = new FileOutputStream(new File(outPutFile));
-            /* Write content to PDF file */
-         JasperExportManager.exportReportToPdfStream(jasperprint, outputStream);
-         File pdf = new File("src/java/jasper/jasperPrueba.pdf");
-         return pdf;
+        String outPutFile = "src/java/jasper/jasperPrueba.pdf";
+        List<report> list = new ArrayList<>();         
+        list.add(reporte);
+        JRBeanCollectionDataSource cobrojrb = new JRBeanCollectionDataSource(list);
+        JasperReport jasperReport = JasperCompileManager.compileReport("src/java/jasper/reporteCanchasPZ.jrxml");
+        Map<String, Object> parametros = new HashMap<>();
+        parametros.put("dataSource", cobrojrb);
+        JasperPrint jasperprint = JasperFillManager.fillReport(jasperReport, parametros, new JREmptyDataSource());        
+        OutputStream outputStream = new FileOutputStream(new File(outPutFile));
+           /* Write content to PDF file */
+        JasperExportManager.exportReportToPdfStream(jasperprint, outputStream);
+        File pdf = new File("src/java/jasper/jasperPrueba.pdf");
+        return pdf;
     }
     
 }

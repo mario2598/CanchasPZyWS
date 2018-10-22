@@ -64,6 +64,7 @@ public class canchaService {
                 em.persist(canchaAux);
             }
             em.flush();
+            em.getEntityManagerFactory().getCache().evictAll();
         } catch(Exception ex){
             canchaAux = null;
         }
@@ -96,6 +97,29 @@ public class canchaService {
             list = null;
         }
         return list;
+    }
+    
+    public Boolean eliminarCancha(Cancha cancha){
+        Cancha canAux = null;
+        if(cancha!=null && cancha.getCanId()!=null){
+            Query qryId = em.createNamedQuery("Cancha.findByCanId", Cancha.class);            
+            qryId.setParameter("canId", cancha.getCanId());   
+            try {
+                canAux = (Cancha) qryId.getSingleResult();
+            } catch (NoResultException ex) {
+                canAux = null;
+            }
+            if(canAux != null){
+                Cancha canAux2 = canAux;
+                em.remove(canAux2);
+                em.flush();
+                em.getEntityManagerFactory().getCache().evictAll();
+                canAux = getCancha(canAux2.getCanId());
+            } else {
+                canAux = null;
+            }
+        }
+        return (canAux == null);
     }
     
 }

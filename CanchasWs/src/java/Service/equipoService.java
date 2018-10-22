@@ -90,11 +90,35 @@ public class equipoService {
                 em.persist(equipoAux);
             }
             em.flush();
+            em.getEntityManagerFactory().getCache().evictAll();
         }catch(Exception ex){
             et.rollback();
             equipoAux = null;
         }
         return equipoAux;
+    }
+    
+    public Boolean eliminarEquipo(Equipo equipo){
+        Equipo equAux = null;
+        if(equipo!=null && equipo.getEquId()!=null){
+            Query qryId = em.createNamedQuery("Equipo.findByEquId", Equipo.class);            
+            qryId.setParameter("equId", equipo.getEquId());   
+            try {
+                equAux = (Equipo) qryId.getSingleResult();
+            } catch (NoResultException ex) {
+                equAux = null;
+            }
+            if(equAux != null){
+                Equipo canAux2 = equAux;
+                em.remove(canAux2);
+                em.flush();
+                em.getEntityManagerFactory().getCache().evictAll();
+                equAux = getEquipo(canAux2.getEquId());
+            } else {
+                equAux = null;
+            }
+        }
+        return (equAux == null);
     }
        
 }
