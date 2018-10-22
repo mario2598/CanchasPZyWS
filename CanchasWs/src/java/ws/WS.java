@@ -15,17 +15,32 @@ import Model.Match;
 import Model.MatchDto;
 import Model.Reto;
 import Model.RetoDto;
+import Model.report;
 import Service.adminService;
 import Service.canchaService;
 import Service.equipoService;
 import Service.matchService;
 import Service.retoService;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
@@ -675,6 +690,27 @@ public class WS {
     public Boolean deleteReto(@WebParam(name = "retoId") Long retoId) {
         //TODO write your implementation code here:
         return null;
+    }
+
+    /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "ganerateJasperReport")
+    public File ganerateJasperReport(@WebParam(name = "reporte") report reporte) throws JRException, FileNotFoundException {
+        String userHomeDirect = System.getProperty("user.home");
+         String outPutFile = "src/java/jasper/jasperPrueba.pdf";
+         List<report> list = new ArrayList<>();         
+         list.add(reporte);
+         JRBeanCollectionDataSource cobrojrb = new JRBeanCollectionDataSource(list);
+         JasperReport jasperReport = JasperCompileManager.compileReport("src/java/jasper/reporteCanchasPZ.jrxml");
+         Map<String, Object> parametros = new HashMap<>();
+         parametros.put("dataSource", cobrojrb);
+         JasperPrint jasperprint = JasperFillManager.fillReport(jasperReport, parametros, new JREmptyDataSource());        
+         OutputStream outputStream = new FileOutputStream(new File(outPutFile));
+            /* Write content to PDF file */
+         JasperExportManager.exportReportToPdfStream(jasperprint, outputStream);
+         File pdf = new File("src/java/jasper/jasperPrueba.pdf");
+         return pdf;
     }
     
 }
