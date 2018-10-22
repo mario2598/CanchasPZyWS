@@ -8,18 +8,18 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-21T03:28:38")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-21T18:13:06")
 @StaticMetamodel(Cancha.class)
 public class Cancha_ { 
 
-    public static volatile SingularAttribute<Cancha, Integer> canLatitud;
+    public static volatile SingularAttribute<Cancha, Double> canLatitud;
     public static volatile SingularAttribute<Cancha, Administrador> admId;
     public static volatile ListAttribute<Cancha, Reto> retoList;
     public static volatile SingularAttribute<Cancha, Integer> canPrecioNoches;
     public static volatile SingularAttribute<Cancha, String> canNombre;
     public static volatile SingularAttribute<Cancha, String> canUrl;
     public static volatile SingularAttribute<Cancha, Long> canId;
-    public static volatile SingularAttribute<Cancha, Integer> canLongitud;
+    public static volatile SingularAttribute<Cancha, Double> canLongitud;
     public static volatile SingularAttribute<Cancha, Integer> canCierra;
     public static volatile SingularAttribute<Cancha, Integer> canCantJugadores;
     public static volatile SingularAttribute<Cancha, Integer> canTel;
