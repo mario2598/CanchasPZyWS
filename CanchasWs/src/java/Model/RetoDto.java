@@ -63,8 +63,7 @@ public class RetoDto {
     }
     
     public void copiarSoloIdCancha(Reto reto){
-        this.canchaId = new CanchaDto();
-        this.canchaId.canId = (reto.getCanchaId().getCanId());
+        this.canchaId = new CanchaDto(reto.getCanchaId());
     }
     
 }

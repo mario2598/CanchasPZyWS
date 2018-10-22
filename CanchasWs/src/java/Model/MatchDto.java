@@ -69,8 +69,7 @@ public class MatchDto {
     }
     
     public void copiarSoloIdCancha(Match match){
-        this.canId = new CanchaDto();
-        this.canId.canId = (match.getCanId().getCanId());
+        this.canId = new CanchaDto(match.getCanId());
     }
     
 }
