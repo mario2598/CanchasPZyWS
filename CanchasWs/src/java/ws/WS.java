@@ -153,10 +153,12 @@ public class WS {
         if(list!=null && !list.isEmpty()){
             List<RetoDto> listDto = new ArrayList<>();
             for(Reto reto : list){
-                RetoDto newR = new RetoDto(reto);
-                newR.copiarSoloIDEquipos(reto);
-                newR.copiarSoloIdCancha(reto);
-                listDto.add(newR);
+                if(reto.getCanchaId()!=null){
+                    RetoDto newR = new RetoDto(reto);
+                    newR.copiarSoloIDEquipos(reto);
+                    newR.copiarSoloIdCancha(reto);
+                    listDto.add(newR);
+                }
             }
             return listDto;
         } else {
