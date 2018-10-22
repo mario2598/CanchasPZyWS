@@ -23,8 +23,8 @@ public class CanchaDto {
     public String canNombre;
     public String canDireccion;
     public Integer canCantJugadores;
-    public Integer canLatitud;
-    public Integer canLongitud;
+    public Double canLatitud;
+    public Double canLongitud;
     public Integer canPrecioDia;
     public Integer canPrecioNoches;
     public Integer canTel;

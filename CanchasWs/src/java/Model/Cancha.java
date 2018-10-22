@@ -68,9 +68,9 @@ public class Cancha implements Serializable {
     @Column(name = "CAN_CANT_JUGADORES")
     private Integer canCantJugadores;
     @Column(name = "CAN_LATITUD")
-    private Integer canLatitud;
+    private Double canLatitud;
     @Column(name = "CAN_LONGITUD")
-    private Integer canLongitud;
+    private Double canLongitud;
     @Column(name = "CAN_PRECIO_DIA")
     private Integer canPrecioDia;
     @Column(name = "CAN_PRECIO_NOCHES")
@@ -180,19 +180,19 @@ public class Cancha implements Serializable {
         this.canCantJugadores = canCantJugadores;
     }
 
-    public Integer getCanLatitud() {
+    public Double getCanLatitud() {
         return canLatitud;
     }
 
-    public void setCanLatitud(Integer canLatitud) {
+    public void setCanLatitud(Double canLatitud) {
         this.canLatitud = canLatitud;
     }
 
-    public Integer getCanLongitud() {
+    public Double getCanLongitud() {
         return canLongitud;
     }
 
-    public void setCanLongitud(Integer canLongitud) {
+    public void setCanLongitud(Double canLongitud) {
         this.canLongitud = canLongitud;
     }
 
