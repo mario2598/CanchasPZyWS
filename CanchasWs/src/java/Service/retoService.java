@@ -72,7 +72,6 @@ public class retoService {
                 em.persist(retoAux);
             }
             em.flush();
-            em.getEntityManagerFactory().getCache().evictAll();
         } catch(Exception ex){
             retoAux = null;
         }
@@ -189,28 +188,4 @@ public class retoService {
         }
         return retornableMatch;
     }
-    
-    public Boolean eliminarReto(Reto reto){
-        Reto retoAux = null;
-        if(reto!=null && reto.getRetoId()!=null){
-            Query qryId = em.createNamedQuery("Reto.findByRetoId", Reto.class);            
-            qryId.setParameter("retoId", reto.getRetoId());   
-            try {
-                retoAux = (Reto) qryId.getSingleResult();
-            } catch (NoResultException ex) {
-                retoAux = null;
-            }
-            if(retoAux != null){
-                Reto retoAux2 = retoAux;
-                em.remove(retoAux2);
-                em.flush();
-                em.getEntityManagerFactory().getCache().evictAll();
-                retoAux = getReto(retoAux2.getRetoId());
-            } else {
-                retoAux = null;
-            }
-        }
-        return (retoAux == null);
-    }
-    
 }
