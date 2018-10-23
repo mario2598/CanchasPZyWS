@@ -124,7 +124,6 @@ public class equipoService {
                 em.remove(canAux2);
                 em.flush();
                 em.getEntityManagerFactory().getCache().evictAll();
-                equAux = getEquipo(canAux2.getEquId());
             } else {
                 equAux = null;
             }

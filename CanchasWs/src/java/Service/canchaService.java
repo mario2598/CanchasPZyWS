@@ -6,6 +6,11 @@
 package Service;
 
 import Model.Cancha;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -120,6 +125,21 @@ public class canchaService {
             }
         }
         return (canAux == null);
+    }
+    
+    public static byte[] convertDocToByteArray(String path)throws FileNotFoundException, IOException{
+        File file = new File(path);
+        FileInputStream fis = new FileInputStream(file);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
+        try {
+            for (int readNum; (readNum = fis.read(buf)) != -1;) {
+                bos.write(buf, 0, readNum);
+            }
+        } catch (IOException ex) {
+        }
+        byte[] bytes = bos.toByteArray();
+        return bytes;
     }
     
 }

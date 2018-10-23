@@ -24,15 +24,18 @@ import Service.retoService;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.servlet.ServletContext;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -58,6 +61,8 @@ public class WS {
      matchService matchService;
      @EJB
      retoService retoService;
+     @Inject
+     ServletContext context;
 
     /**
      * Web service operation
@@ -669,23 +674,30 @@ public class WS {
 
     /**
      * Web service operation
+     * @param reporte
+     * @return 
+     * @throws net.sf.jasperreports.engine.JRException 
+     * @throws java.io.FileNotFoundException 
+     * @throws java.io.IOException
      */
     @WebMethod(operationName = "ganerateJasperReport")
-    public File ganerateJasperReport(@WebParam(name = "reporte") report reporte) throws JRException, FileNotFoundException {
-        String userHomeDirect = System.getProperty("user.home");
-        String outPutFile = "src/java/jasper/jasperPrueba.pdf";
-        List<report> list = new ArrayList<>();         
-        list.add(reporte);
-        JRBeanCollectionDataSource cobrojrb = new JRBeanCollectionDataSource(list);
-        JasperReport jasperReport = JasperCompileManager.compileReport("src/java/jasper/reporteCanchasPZ.jrxml");
-        Map<String, Object> parametros = new HashMap<>();
-        parametros.put("dataSource", cobrojrb);
-        JasperPrint jasperprint = JasperFillManager.fillReport(jasperReport, parametros, new JREmptyDataSource());        
-        OutputStream outputStream = new FileOutputStream(new File(outPutFile));
-           /* Write content to PDF file */
-        JasperExportManager.exportReportToPdfStream(jasperprint, outputStream);
-        File pdf = new File("src/java/jasper/jasperPrueba.pdf");
-        return pdf;
+    public byte[] ganerateJasperReport(@WebParam(name = "reporte") report reporte) throws JRException, FileNotFoundException, IOException {
+         String ruta = context.getRealPath("/");
+         String JasperRuta = ruta+ "\\jasper\\reporteCanchasPZ.jrxml";
+         String pdfRuta = ruta+ "\\jasper\\jasperPrueba.pdf";
+         String outPutFile = pdfRuta;
+         List<report> list = new ArrayList<>();         
+         list.add(reporte);
+         JRBeanCollectionDataSource cobrojrb = new JRBeanCollectionDataSource(list);
+         JasperReport jasperReport = JasperCompileManager.compileReport(JasperRuta);
+         Map<String, Object> parametros = new HashMap<>();
+         parametros.put("dataSource", cobrojrb);
+         JasperPrint jasperprint = JasperFillManager.fillReport(jasperReport, parametros, new JREmptyDataSource());        
+         OutputStream outputStream = new FileOutputStream(new File(outPutFile));
+            /* Write content to PDF file */
+         JasperExportManager.exportReportToPdfStream(jasperprint, outputStream);
+         byte[] ReportBytes = canchaService.convertDocToByteArray(outPutFile);
+         return ReportBytes;
     }
     
 }
