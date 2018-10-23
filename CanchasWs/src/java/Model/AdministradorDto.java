@@ -22,6 +22,7 @@ public class AdministradorDto {
     public Long adminId;
     public String adminUsu;
     public String adminPassword;
+    public String adminEmail;
     public List<CanchaDto> canchaList;
      
     //Constructors
