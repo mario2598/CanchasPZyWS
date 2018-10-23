@@ -57,14 +57,12 @@ public class MatchDto {
     
     public void copiarSoloIDEquipos(Match match){
         if(match.getEquId1()!=null){
-            this.equId1 = new EquipoDto();
-            this.equId1.equId = (match.getEquId1().getEquId());
+            this.equId1 = new EquipoDto(match.getEquId1());
         } else {
             this.equId1 = null;
         }
         if(match.getEquId2()!=null){
-            this.equId2 = new EquipoDto();
-            this.equId2.equId = (match.getEquId2().getEquId());
+            this.equId2 = new EquipoDto(match.getEquId2());
         } else {
             this.equId2 = null;
         }

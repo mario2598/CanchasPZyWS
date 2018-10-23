@@ -22,7 +22,6 @@ public class AdministradorDto {
     public Long adminId;
     public String adminUsu;
     public String adminPassword;
-    public String adminEmail;
     public List<CanchaDto> canchaList;
      
     //Constructors
@@ -41,7 +40,6 @@ public class AdministradorDto {
     public void duplicarInfo(Administrador admin){
         this.adminUsu = admin.getAdmUsu();
         this.adminPassword = admin.getAdmPassword();
-        this.adminEmail = admin.getAdmMail();
     }
     
     public void convertirListaCanchas(List<Cancha> list){

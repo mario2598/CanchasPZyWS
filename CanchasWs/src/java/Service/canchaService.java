@@ -6,13 +6,7 @@
 package Service;
 
 import Model.Cancha;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -70,6 +64,7 @@ public class canchaService {
                 em.persist(canchaAux);
             }
             em.flush();
+            em.getEntityManagerFactory().getCache().evictAll();
         } catch(Exception ex){
             canchaAux = null;
         }
@@ -104,19 +99,27 @@ public class canchaService {
         return list;
     }
     
-    public static byte[] convertDocToByteArray(String path)throws FileNotFoundException, IOException{
-        File file = new File(path);
-        FileInputStream fis = new FileInputStream(file);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        byte[] buf = new byte[1024];
-        try {
-            for (int readNum; (readNum = fis.read(buf)) != -1;) {
-                bos.write(buf, 0, readNum);
+    public Boolean eliminarCancha(Cancha cancha){
+        Cancha canAux = null;
+        if(cancha!=null && cancha.getCanId()!=null){
+            Query qryId = em.createNamedQuery("Cancha.findByCanId", Cancha.class);            
+            qryId.setParameter("canId", cancha.getCanId());   
+            try {
+                canAux = (Cancha) qryId.getSingleResult();
+            } catch (NoResultException ex) {
+                canAux = null;
             }
-        } catch (IOException ex) {
-            
+            if(canAux != null){
+                Cancha canAux2 = canAux;
+                em.remove(canAux2);
+                em.flush();
+                em.getEntityManagerFactory().getCache().evictAll();
+                canAux = getCancha(canAux2.getCanId());
+            } else {
+                canAux = null;
+            }
         }
-        byte[] bytes = bos.toByteArray();
-        return bytes;
+        return (canAux == null);
     }
+    
 }
