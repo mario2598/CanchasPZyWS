@@ -57,6 +57,8 @@ public class adminService {
      * @return 
      */
     public Administrador guardarAdmin(Administrador admin){
+        System.out.println("Intentando guardar el admin con los datos:");
+        System.out.println("ID: " + admin.getAdmId() + " Usu: " + admin.getAdmUsu() + " Pass: " + admin.getAdmPassword());
         Administrador adminAux;
         try{
             if(admin.getAdmId()!=null){
@@ -83,45 +85,16 @@ public class adminService {
                 }
                 if(adminAux==null){
                     em.persist(admin);
-                    adminAux = em.merge(admin);
+//                    adminAux = em.merge(admin);
                 } else {
                     adminAux = null;
                 }
             }
             em.flush();
-            em.getEntityManagerFactory().getCache().evictAll();
         }catch(Exception | AnnotationFormatError ex){
             adminAux = null;
         }
         return adminAux;
-    }
-    
-    /**
-     * 
-     * @param admin
-     * @return 
-     */
-    public Boolean eliminarAdmin(Administrador admin){
-        Administrador adminAux = null;
-        if(admin!=null && admin.getAdmId()!=null){
-            Query qryId = em.createNamedQuery("Administrador.findByAdmId", Administrador.class);            
-            qryId.setParameter("admId", admin.getAdmId());   
-            try {
-                adminAux = (Administrador) qryId.getSingleResult();
-            } catch (NoResultException ex) {
-                adminAux = null;
-            }
-            if(adminAux != null){
-                Administrador adminAux2 = adminAux;
-                em.remove(adminAux2);
-                em.flush();
-                em.getEntityManagerFactory().getCache().evictAll();
-                adminAux = getAdmin(adminAux2.getAdmId());
-            } else {
-                adminAux = null;
-            }
-        }
-        return (adminAux == null);
     }
     
  }
