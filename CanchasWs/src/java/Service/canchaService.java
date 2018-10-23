@@ -114,6 +114,7 @@ public class canchaService {
                 bos.write(buf, 0, readNum);
             }
         } catch (IOException ex) {
+            
         }
         byte[] bytes = bos.toByteArray();
         return bytes;
