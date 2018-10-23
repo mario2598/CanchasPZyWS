@@ -87,7 +87,8 @@ public class CanchaDto {
     }
     
     public void copiarSoloIdAdmin(Cancha cancha){
-        this.admId = new AdministradorDto(cancha.getAdmId());
+        this.admId = new AdministradorDto();
+        this.admId.adminId = cancha.getCanId();
     }
     
 }

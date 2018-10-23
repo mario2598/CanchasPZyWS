@@ -72,6 +72,7 @@ public class matchService {
                 em.persist(matchAux);
             }
             em.flush();
+            em.getEntityManagerFactory().getCache().evictAll();
         } catch(Exception ex){
             matchAux = null;
         }
@@ -194,6 +195,29 @@ public class matchService {
             retornableMatch = null;
         }
         return retornableMatch;
+    }
+    
+    public Boolean eliminarMatch(Match match){
+        Match matchAux = null;
+        if(match!=null && match.getMatId()!=null){
+            Query qryId = em.createNamedQuery("Match.findByMatId", Match.class);            
+            qryId.setParameter("matId", match.getMatId());   
+            try {
+                matchAux = (Match) qryId.getSingleResult();
+            } catch (NoResultException ex) {
+                matchAux = null;
+            }
+            if(matchAux != null){
+                Match matchAux2 = matchAux;
+                em.remove(matchAux2);
+                em.flush();
+                em.getEntityManagerFactory().getCache().evictAll();
+                matchAux = getMatch(matchAux2.getMatId());
+            } else {
+                matchAux = null;
+            }
+        }
+        return (matchAux == null);
     }
     
 }

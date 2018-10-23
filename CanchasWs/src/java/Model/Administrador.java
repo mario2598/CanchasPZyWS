@@ -38,10 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Administrador.findByAdmPassword", query = "SELECT a FROM Administrador a WHERE a.admPassword = :admPassword AND a.admUsu = :admUsu")})
 public class Administrador implements Serializable {
 
-    //@Size(max = 80)
-    @Column(name = "ADM_MAIL")
-    private String admMail;
-
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -91,7 +87,6 @@ public class Administrador implements Serializable {
     public void copiarInfo(AdministradorDto adminDto){
         this.admUsu = adminDto.adminUsu;
         this.admPassword = adminDto.adminPassword;
-        this.admMail = adminDto.adminEmail;
     }
     
     public void convertirListaCanchas(List<CanchaDto> list){
@@ -162,14 +157,6 @@ public class Administrador implements Serializable {
     @Override
     public String toString() {
         return "Model.Administrador[ admId=" + admId + " ]";
-    }
-
-    public String getAdmMail() {
-        return admMail;
-    }
-
-    public void setAdmMail(String admMail) {
-        this.admMail = admMail;
     }
     
 }

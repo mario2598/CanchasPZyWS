@@ -5,6 +5,7 @@
  */
 package Service;
 
+import Model.Administrador;
 import Model.Equipo;
 import java.util.List;
 import javax.ejb.LocalBean;
@@ -86,15 +87,49 @@ public class equipoService {
                     em.persist(equipoAux);
                 }
             } else {
-                equipoAux = team;
-                em.persist(equipoAux);
+                Query qryUsu = em.createNamedQuery("Equipo.findByEquUsu", Equipo.class);            
+                qryUsu.setParameter("equUsu", team.getEquId());
+                try{
+                    equipoAux = (Equipo) qryUsu.getSingleResult();
+                }catch(NoResultException ex){
+                    equipoAux = null;
+                }
+                if(equipoAux==null){
+                    em.persist(team);
+                    equipoAux = em.merge(team);
+                } else {
+                    equipoAux = null;
+                }
             }
             em.flush();
+            em.getEntityManagerFactory().getCache().evictAll();
         }catch(Exception ex){
-            et.rollback();
             equipoAux = null;
         }
         return equipoAux;
+    }
+    
+    public Boolean eliminarEquipo(Equipo equipo){
+        Equipo equAux = null;
+        if(equipo!=null && equipo.getEquId()!=null){
+            Query qryId = em.createNamedQuery("Equipo.findByEquId", Equipo.class);            
+            qryId.setParameter("equId", equipo.getEquId());   
+            try {
+                equAux = (Equipo) qryId.getSingleResult();
+            } catch (NoResultException ex) {
+                equAux = null;
+            }
+            if(equAux != null){
+                Equipo canAux2 = equAux;
+                em.remove(canAux2);
+                em.flush();
+                em.getEntityManagerFactory().getCache().evictAll();
+                equAux = getEquipo(canAux2.getEquId());
+            } else {
+                equAux = null;
+            }
+        }
+        return (equAux == null);
     }
        
 }
