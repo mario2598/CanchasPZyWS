@@ -51,12 +51,14 @@ public class RetoDto {
     
     public void copiarSoloIDEquipos(Reto reto){
         if(reto.getEquipo1Id()!=null){
-            this.equipo1Id = new EquipoDto(reto.getEquipo1Id());
+            this.equipo1Id = new EquipoDto();
+            this.equipo1Id.equId = (reto.getEquipo1Id().getEquId());
         } else {
             this.equipo1Id = null;
         }
         if(reto.getEquipo2Id()!=null){
-            this.equipo2Id = new EquipoDto(reto.getEquipo2Id());
+            this.equipo2Id = new EquipoDto();
+            this.equipo2Id.equId = (reto.getEquipo2Id().getEquId());
         } else {
             this.equipo2Id = null;
         }
